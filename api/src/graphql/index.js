@@ -12,16 +12,19 @@ const typeDefs = gql `
 
 const resolvers = {
     Query: {
-      ...Seller.resolvers.queries,
-      ...Gig.resolvers.queries,
+      ...Seller.resolvers.Query,
+      ...Gig.resolvers.Query,
 
     },
 
     Mutation:{
-      ...Seller.resolvers.mutations,
-      ...Gig.resolvers.mutations,
+      ...Seller.resolvers.Mutation,
+      ...Gig.resolvers.Mutation,
 
-    }
+    },
+
+    ...Seller.resolvers.Seller,
+
   
 }
 
