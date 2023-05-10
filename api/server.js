@@ -8,15 +8,10 @@ const db = require('./config/db_connection')
 
 async function startServer() {
   const app = express();
-  const schema = {typeDefs,resolvers}
 
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ request, reply }) => ({
-      request,
-      reply,
-    }),
   });
 
   await apolloServer.start();
