@@ -1,6 +1,6 @@
 const { mongoose } = require("mongoose");
-const Gig = require("../../db/gig");
-const Seller = require("../../db/seller");
+const Gig = require("../../models/gig");
+const Seller = require("../../models/seller");
 
 const queries = {
   // gigs: async () => await Gig.find(),
@@ -12,18 +12,18 @@ const mutations = {
   createGig: async (parent, args) => {
     const { seller, title, description, price, category } = args;
     const gig = new Gig({
-        seller: seller,
+        seller,
         title,
         description,
         price,
         category
     });
-    const gigresponse = await gig.save();
+    await gig.save();
     const currentSeller = await Seller.findById((new mongoose.Types.ObjectId(seller)).toString())
-    console.log(currentSeller);
+  //  console.log(currentSeller);
     currentSeller.gigs.push(gig._id);
     await currentSeller.save();
-    return  queries.gig(parent,gig);
+    return queries.gig(parent,gig);
 },
 updateGig: async (parent, args) => {
     const { id, ...updatedFields } = args;
@@ -44,13 +44,6 @@ deleteGig: async (parent, args) => {
 const resolvers = {
   Query: queries,
   Mutation: mutations,
-  Seller: {
-    gigs: async (parent) => {
-      const gigs = await Gig.findBySellerId({ id: parent.id });
-      console.log(gigs);
-      return gigs;
-    },
-  },
 };
 
 module.exports = resolvers;

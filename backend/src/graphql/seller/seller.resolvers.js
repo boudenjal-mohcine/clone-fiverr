@@ -1,5 +1,5 @@
-const Seller = require("../../db/seller");
-const Gig = require("../../db/gig");
+const Seller = require("../../models/seller");
+const Gig = require("../../models/gig");
 
 const queries = {
   sellers: async () => await Seller.find().populate('gigs').exec(),
