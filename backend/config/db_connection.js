@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
-
 module.exports = {
-  connectToServer: function (callback) {
+  connectToServer: function () {
     //connect to mongodb
     mongoose
       .connect(

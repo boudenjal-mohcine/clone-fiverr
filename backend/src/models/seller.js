@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
+
+ObjectId.prototype.valueOf = function() { return this.toString(); }
 
 const sellerSchema = mongoose.Schema({
   userId: { type: String, default: "645a3dec8e025bc3697d99bf" },
@@ -8,8 +11,14 @@ const sellerSchema = mongoose.Schema({
     type: [String],
     default: [],
   },
+  gigs: [{
+    type: ObjectId,
+    ref: "Gig",
+  }]
 },
-{ timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+{ timestamps: true }
 );
+
+
 
 module.exports = mongoose.model("Seller", sellerSchema);
