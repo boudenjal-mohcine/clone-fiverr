@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 
-
 module.exports = {
-  connectToServer: function (callback) {
+  connectToServer: function () {
     //connect to mongodb
     mongoose.connect(
         'mongodb+srv://mohcineboudenjal:X62DCaulVwh9RtSK@cluster0.spbrwpo.mongodb.net/'                                                               

@@ -6,23 +6,18 @@ const typeDefs = gql `
     #our types
     ${Seller.types}
     ${Gig.types}
-
 `;
-
 
 const resolvers = {
     Query: {
-      ...Seller.resolvers.queries,
-      ...Gig.resolvers.queries,
-
+      ...Seller.resolvers.Query,
+      ...Gig.resolvers.Query,
     },
 
     Mutation:{
-      ...Seller.resolvers.mutations,
-      ...Gig.resolvers.mutations,
-
-    }
-  
+      ...Seller.resolvers.Mutation,
+      ...Gig.resolvers.Mutation,
+    },
 }
 
 module.exports = {resolvers,typeDefs};

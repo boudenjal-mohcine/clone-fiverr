@@ -21,10 +21,6 @@ async function startServer() {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ request, reply }) => ({
-      request,
-      reply,
-    }),
   });
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
