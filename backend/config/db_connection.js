@@ -4,9 +4,8 @@ const mongoose = require("mongoose");
 module.exports = {
   connectToServer: function (callback) {
     //connect to mongodb
-    mongoose
-      .connect(
-        `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER_NAME}/fiverr_dbs?retryWrites=true&w=majority`
+    mongoose.connect(
+        'mongodb+srv://mohcineboudenjal:X62DCaulVwh9RtSK@cluster0.spbrwpo.mongodb.net/'                                                               
       )
       .then(() => {
         console.log("Successfully connected to MongoDB Atlas!");

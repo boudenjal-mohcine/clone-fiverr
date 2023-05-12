@@ -1,4 +1,4 @@
-const Seller = require("../../db/seller");
+const Seller = require("../../models/seller");
 
 
 const queries = {

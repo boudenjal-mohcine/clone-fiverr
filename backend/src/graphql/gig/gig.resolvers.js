@@ -1,4 +1,4 @@
-const Gig = require("../../db/gig");
+const Gig = require("../../models/gig");
 
 const queries = {
     gigs: async () => await Gig.find(),
