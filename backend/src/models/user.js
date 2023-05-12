@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema.Types;
-const uniqueValidator = require('mongoose-unique-validator');
 
-ObjectId.prototype.valueOf = function () {
-  return this.toString();
-};
 
 const userSchema = mongoose.Schema(
   {
@@ -17,16 +13,22 @@ const userSchema = mongoose.Schema(
     seller: {
       type: ObjectId,
       ref: "Seller",
-      required: false
+      required: false,
     },
     buyer: {
       type: ObjectId,
       ref: "Buyer",
-      required: false
+      required: false,
     },
+    conversations: [
+      {
+        type: ObjectId,
+        ref: "Conversation",
+        required: false,
+      },
+    ],
   },
   { timestamps: true }
 );
-userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("User", userSchema);
