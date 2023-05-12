@@ -4,7 +4,7 @@ scalar DateTime
 #typedef
 type Seller {
   id: ID!
-  userId: ID
+  user: User!
   first_name: String!
   last_name: String!
   skills: [String]!
@@ -15,9 +15,9 @@ type Seller {
 
 #mutations
 type Mutation {
-  createSeller(first_name: String, last_name: String, skills:[String]): Seller
+  createSeller(first_name: String, last_name: String, skills:[String], user: String!): Seller
   updateSeller(id: ID, first_name: String, last_name: String, skills: [String]):Seller
-  deleteSeller(id:ID): Seller
+  #deleteSeller(id:ID): Seller  #we will have a problem if seller deleted
 }
 
 #queries
