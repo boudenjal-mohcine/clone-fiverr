@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema.Types;
 
-ObjectId.prototype.valueOf = function() { return this.toString(); }
-
 const sellerSchema = mongoose.Schema({
-  userId: { type: String, default: "645a3dec8e025bc3697d99bf" },
+  user: {
+    type: ObjectId,
+    ref: "User",
+    required: true
+  },  
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
   skills: {
