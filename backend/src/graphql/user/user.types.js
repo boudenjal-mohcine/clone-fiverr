@@ -1,5 +1,6 @@
 const types = `
 scalar DateTime
+scalar Upload
 
 #typedef
 type User {
@@ -19,7 +20,7 @@ type User {
 
 #mutations
 type Mutation {
-  createUser(username: String!, email: String!, password: String!, profilePicture: String): User
+  createUser(username: String!, email: String!, password: String!, profilePicture: Upload): User
 }
 
 #queries
