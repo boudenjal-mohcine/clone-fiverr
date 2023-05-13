@@ -1,22 +1,60 @@
 const User = require("../../models/user");
+const { join, parse } = require("path");
+const { GraphQLUpload } = require("graphql-upload");
+const { createWriteStream } = require("fs");
+const { finished } = require("stream/promises");
 
 const queries = {
-  users: async () => await User.find().populate('seller').populate('buyer').populate('conversations').exec(),
-  user: async (args) => await User.findById(args.id).populate('seller').populate('buyer').populate('conversations').exec(),
+  users: async () =>
+    await User.find()
+      .populate("seller")
+      .populate("buyer")
+      .populate("conversations")
+      .exec(),
+  user: async (args) =>
+    await User.findById(args.id)
+      .populate("seller")
+      .populate("buyer")
+      .populate("conversations")
+      .exec(),
 };
 
 const mutations = {
-  createUser: async (args) => {
-    const { username, email, password, profilePicture } = args;
+  createUser: async (_, args) => {
+    const { username, email, password } = args;
+    const picture = await args.profilePicture;
+
+    const { filename, createReadStream } = picture.file;
+    let stream = createReadStream();
+
+    let { ext, name } = parse(filename);
+
+    profilePicture =
+      name.replace(/([^a-z0-9 ]+)/gi, "-").replace(" ", "_") +
+      "-" +
+      Date.now() +
+      ext;
+
+    let serverFile = join(__dirname, `../../uploads/${profilePicture}`);
+
+    let writeStream = createWriteStream(serverFile);
+    stream.pipe(writeStream);
+    await finished(writeStream);
+
     const user = new User({
-        username, email, password, profilePicture
+      username,
+      email,
+      password,
+      profilePicture,
     });
+
     await user.save();
     return queries.user(user);
-}
+  },
 };
 
 const resolvers = {
+  Upload: GraphQLUpload,
   Query: queries,
   Mutation: mutations,
 };

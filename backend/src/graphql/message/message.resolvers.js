@@ -22,7 +22,7 @@ const mutations = {
     );
 
     if (!senderMessage) {
-      throw new Error(` User with  This ID ${user} not founded`);
+      throw new Error(` User with  This ID ${user} not found `);
     }
 
     const message = new Message({
