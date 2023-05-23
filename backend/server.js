@@ -5,17 +5,25 @@ const { ApolloServer } = require("@apollo/server");
 const { expressMiddleware } = require("@apollo/server/express4");
 require("dotenv").config();
 const db = require('./config/db_connection')
+const { join } = require('path');
 
-async function startbServer() {
+const {
+  graphqlUploadExpress // A Koa implementation is also exported.
+} = require('graphql-upload');
+async function startServer() {
   const app = express();
+  app.use(express.json());
 
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
+    csrfPrevention: false // we will enable it when we build the front side
   });
+  app.use(graphqlUploadExpress());
+
 
   await apolloServer.start();
-  app.use(express.json(), cors());
+  app.use(express.static(join(__dirname, './uploads')),cors());
   app.use("/graphql",expressMiddleware(apolloServer));
 
   return app;
