@@ -6,7 +6,7 @@ const { expressMiddleware } = require("@apollo/server/express4");
 require("dotenv").config();
 const db = require('./config/db_connection')
 
-async function startServer() {
+async function startbServer() {
   const app = express();
 
   const apolloServer = new ApolloServer({

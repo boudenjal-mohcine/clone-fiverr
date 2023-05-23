@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema.Types;
 
-ObjectId.prototype.valueOf = function() { return this.toString(); }
-
 const gigSchema = mongoose.Schema(
   {
     seller: {
@@ -13,8 +11,17 @@ const gigSchema = mongoose.Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },
-    description: { type: String, required: true },
-    category: { type: String, required: true },
+    category: {   
+      type: ObjectId,
+      ref: 'Category', },
+    orders: [{
+      type: ObjectId,
+      ref: 'Order',
+    }],
+    reviews: [{
+      type: ObjectId,
+      ref: 'Review',
+    }],
   },
   { timestamps: true }
 );
