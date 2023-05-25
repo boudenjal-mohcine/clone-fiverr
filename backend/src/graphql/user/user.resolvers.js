@@ -21,7 +21,7 @@ const queries = {
 
 const mutations = {
   createUser: async (_, args) => {
-    const { username, email, password } = args;
+    const { username, email, password ,country} = args;
     const picture = await args.profilePicture;
 
     const { filename, createReadStream } = picture.file;
@@ -46,6 +46,7 @@ const mutations = {
       email,
       password,
       profilePicture,
+      country,
     });
 
     await user.save();

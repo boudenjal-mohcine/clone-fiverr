@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema(
     isBuyer: { type: Boolean, default: false },
     isSeller: { type: Boolean, default: false },
     profilePicture: { type: String },
+    country: { type: String },
     seller: {
       type: ObjectId,
       ref: "Seller",
