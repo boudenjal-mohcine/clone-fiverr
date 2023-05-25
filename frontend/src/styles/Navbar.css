@@ -91,8 +91,10 @@
     width: 95vw;
     padding: 10px 0px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    margin-left: 10px ;
     font-weight: 300;
+    align-items: center;
     color: gray;
     font-family: "Montserrat", "sans-serif";
   }

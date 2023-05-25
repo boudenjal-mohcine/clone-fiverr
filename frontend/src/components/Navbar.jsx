@@ -3,6 +3,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import SubMenu from "./SubMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import "../styles/Navbar.css";
+import axios from "axios";
+import { getCategories } from "../api/categoryAPI";
+
 function Navbar() {
   //images
   const [isImage1Visible, setImage1Visible] = useState(true);
@@ -11,24 +14,21 @@ function Navbar() {
   const [input, setInput] = useState("");
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const [cats, setCats] = useState([]);
+
+  useEffect(() => {
+    getCategories().then((result) => {
+        setCats(result);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const handleSubmit = () => {
     navigate(`gigs?search=${input}`);
   };
-
-  const menuItems = [
-    { path: "/gigs?cat=design", label: "Graphics & Design" },
-    { path: "/gigs?cat=writing", label: "Writing & Translation" },
-    { path: "/gigs?cat=ai", label: "AI Services" },
-    { path: "/gigs?cat=web", label: "Programming & Tech" },
-    { path: "/gigs?cat=business", label: "Business" },
-    { path: "/gigs?cat=ai", label: "AI Services" },
-    { path: "/gigs?cat=web", label: "Programming & Tech" },
-    { path: "/gigs?cat=business", label: "Business" },
-    { path: "/", label: "Lifestyle" },
-  ];
 
   const transitionVariants = {
     initial: { opacity: 0, x: -100 },
@@ -119,7 +119,7 @@ function Navbar() {
         {(active || pathname !== "/") && (
           <>
             <hr />
-            <SubMenu items={menuItems} />
+            <SubMenu items={cats}/>
             <hr />
           </>
         )}
@@ -134,7 +134,7 @@ function Navbar() {
             </h1>
             <div className="search">
               <div className="searchInput">
-                <img src="search.png" alt="" />
+                <img src="images/search.png" alt="" />
                 <input
                   text="text"
                   placeholder="Try building mobile app"
@@ -145,34 +145,21 @@ function Navbar() {
             </div>
             <div className="popular">
               <span>Popular: </span>
-              <button>
-                <Link className="link" to="/gigs?cat=design">
-                  Web Design
-                </Link>{" "}
-              </button>
-              <button>
-                <Link className="link" to="/gigs?cat=web">
-                  Wordpress
+              {(cats.slice(0,4)).map((cat,index) => (
+                <button key={index} >
+                <Link className="link" to={`{/gigs?cat=${cat.label}`}>
+                  {cat.label}
                 </Link>
               </button>
-              <button>
-                <Link className="link" to="/gigs?cat=design">
-                  Logo Design
-                </Link>
-              </button>
-              <button>
-                <Link className="link" to="/gigs?cat=ai">
-                  AI services
-                </Link>
-              </button>
+              ))}
             </div>
           </div>
           <div className="right">
             <AnimatePresence mode="wait">
               {isImage1Visible ? (
                 <motion.img
-                  key="image1"
-                  src="/2.png"
+                  key="person1"
+                  src="images/person1.png"
                   initial="initial"
                   animate="animate"
                   exit="exit"
@@ -181,8 +168,8 @@ function Navbar() {
                 />
               ) : (
                 <motion.img
-                  key="image2"
-                  src="/7.png"
+                  key="person2"
+                  src="images/person2.png"
                   initial="initial"
                   animate="animate"
                   exit="exit"

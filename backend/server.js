@@ -8,13 +8,15 @@ const db = require('./config/db_connection');
 const { join } = require('path');
 const userRoutes = require('./routes/user');
 const auth = require('./src/middleware/auth');
-
+const categoryRoutes = require('./routes/category')
 const {
   graphqlUploadExpress 
 } = require('graphql-upload');
-const { json } = require("body-parser");
+
+
 async function startServer() {
   const app = express();
+  
   app.use(express.json(),cors());
   const apolloServer = new ApolloServer({
     typeDefs,
@@ -27,6 +29,7 @@ async function startServer() {
   app.use(express.static(join(__dirname, './uploads')));
   app.use("/graphql",expressMiddleware(apolloServer));
   app.use("/api/auth", userRoutes);
+  app.use("/api/category", categoryRoutes);
   app.use(graphqlUploadExpress());
 
   return app;
