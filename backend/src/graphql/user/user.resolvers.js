@@ -11,7 +11,7 @@ const queries = {
       .populate("buyer")
       .populate("conversations")
       .exec(),
-  user: async (args) =>
+  user: async (parent,args) =>
     await User.findById(args.id)
       .populate("seller")
       .populate("buyer")
@@ -35,7 +35,7 @@ const mutations = {
       Date.now() +
       ext;
 
-    let serverFile = join(__dirname, `../../uploads/${profilePicture}`);
+    let serverFile = join(__dirname, `../../uploads/profiles/${profilePicture}`);
 
     let writeStream = createWriteStream(serverFile);
     stream.pipe(writeStream);

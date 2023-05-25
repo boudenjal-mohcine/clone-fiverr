@@ -27,10 +27,10 @@ async function startServer() {
 
   await apolloServer.start();
   app.use(express.static(join(__dirname, './uploads')));
+  app.use(graphqlUploadExpress());
   app.use("/graphql",expressMiddleware(apolloServer));
   app.use("/api/auth", userRoutes);
   app.use("/api/category", categoryRoutes);
-  app.use(graphqlUploadExpress());
 
   return app;
 }
