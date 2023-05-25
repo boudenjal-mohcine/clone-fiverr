@@ -35,7 +35,7 @@ const mutations = {
       Date.now() +
       ext;
 
-    let serverFile = join(__dirname, `../../uploads/profiles/${profilePicture}`);
+    let serverFile = join(__dirname, `../../../public/uploads/profiles/${profilePicture}`);
 
     let writeStream = createWriteStream(serverFile);
     stream.pipe(writeStream);
