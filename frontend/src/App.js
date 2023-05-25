@@ -1,20 +1,17 @@
 import React from 'react';
-import { createBrowserRouter,RouterProvider } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './components/Navbar';
-
-function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Navbar />,
-    }
-  ]);
+import GigsView from './views/GigsView';
   
-  return (
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
-  );
+function App() {
+  return(
+  <Router>
+    <Navbar />
+    <Routes>
+      <Route path='/' exact element={<GigsView/>} />
+    </Routes>
+  </Router>
+  )
 }
 
 export default App;

@@ -3,11 +3,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import SubMenu from "./SubMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import "../styles/Navbar.css";
-import axios from "axios";
 import { getCategories } from "../api/categoryAPI";
 
 function Navbar() {
-  //images
+
   const [isImage1Visible, setImage1Visible] = useState(true);
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
@@ -147,7 +146,7 @@ function Navbar() {
               <span>Popular: </span>
               {(cats.slice(0,4)).map((cat,index) => (
                 <button key={index} >
-                <Link className="link" to={`{/gigs?cat=${cat.label}`}>
+                <Link className="link" to={`{/gigs?cat=${cat.id}`}>
                   {cat.label}
                 </Link>
               </button>
