@@ -13,6 +13,7 @@ type User {
   isBuyer: Boolean
   isSeller: Boolean
   profilePicture: String
+  country:String
   conversations: [Conversation]
   createdAt: DateTime
   updatedAt: DateTime
@@ -20,7 +21,7 @@ type User {
 
 #mutations
 type Mutation {
-  createUser(username: String!, email: String!, password: String!, profilePicture: Upload): User
+  createUser(username: String!, email: String!, password: String!, profilePicture: Upload, country:String): User
 }
 
 #queries
