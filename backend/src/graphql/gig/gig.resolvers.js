@@ -39,7 +39,7 @@ const mutations = {
       Date.now() +
       ext;
 
-    let serverFile = join(__dirname, `../../../public/uploads/banners/${banner}`);
+    let serverFile = join(__dirname, `../../uploads/banners/${banner}`);
 
     let writeStream = createWriteStream(serverFile);
     stream.pipe(writeStream);
@@ -89,7 +89,7 @@ const mutations = {
       if (gigToUpdate.banner) {
         const oldBannerPath = join(
           __dirname,
-          `../../uploads/banners/${gigToUpdate.banner}`
+          `../uploads/banners/${banner}`
         );
         unlink(oldBannerPath, (err) => {
           if (err) console.log(err);
@@ -108,7 +108,7 @@ const mutations = {
               Date.now() +
               ext;
         
-            let serverFile = join(__dirname, `.../../../public/uploads/banners/${banner}`);
+            let serverFile = join(__dirname, `../../uploads/banners/${banner}`);
         
             let writeStream = createWriteStream(serverFile);
             stream.pipe(writeStream);

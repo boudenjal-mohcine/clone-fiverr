@@ -5,15 +5,15 @@ const Gig = require("../../models/gig");
 const queries = {
   reviews: async () =>
     await Review.find().populate("gig").exec(),
-  review: async (parent,args) => await Review.findById(args.id).populate("gig").exec(),
+  review: async (parent,args) => await Review.findById(args.id).populate("gig").populate("user").exec(),
 };
 
 const mutations = {
   createReview: async (parent, args) => {
-    const { gig, comment, rating } = args;
+    const { gig, comment, rating, user } = args;
 
     const review = new Review({
-      gig, comment, rating
+      gig, comment, rating, user
     });
 
     await review.save();
