@@ -6,6 +6,16 @@ const { join, parse } = require("path");
 const { GraphQLUpload } = require("graphql-upload");
 const { createWriteStream, unlink } = require("fs");
 const { finished } = require("stream/promises");
+const sharp = require('sharp');
+
+// //function to resize photo
+
+// const resizeBanner = function(input){
+
+
+
+// }
+
 
 const queries = {
   // gigs: async () => await Gig.find(),
@@ -31,21 +41,37 @@ const mutations = {
     const image = await args.banner;
     let banner = "default.jpg"
     if(image){
+      
     const { filename, createReadStream } = image.file;
     let stream = createReadStream();
     let { ext, name } = parse(filename);
 
+    
+    let serverFile = join(__dirname, `../../uploads/banners/${filename}`);
+
+    let writeStream = createWriteStream(serverFile);
+    stream.pipe(writeStream);
+    await finished(writeStream);
+
+    console.log("ffff"+serverFile);
     banner =
       name.replace(/([^a-z0-9 ]+)/gi, "-").replace(" ", "_") +
       "-" +
       Date.now() +
       ext;
 
-    let serverFile = join(__dirname, `../../uploads/banners/${banner}`);
+    sharp(serverFile).resize({ height: 250, width: 400 }).toFile(join(__dirname, `../../uploads/banners/${banner}`))
+    .then(async function() {
+         unlink(serverFile, (err) => {
+          if (err) console.log(err);
+        });
+        console.log("Success");
+    }) 
+    .catch(function() {
+        console.log("Error occured");
+    });
 
-    let writeStream = createWriteStream(serverFile);
-    stream.pipe(writeStream);
-    await finished(writeStream);
+
     }
     const gig = new Gig({
       seller,
