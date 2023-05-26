@@ -4,11 +4,14 @@ import { getCategories } from "../api/categoryAPI";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from '@apollo/client';
 import { ADD_GIG } from '../api/mutations';
+import { useDispatch, useSelector } from "react-redux";
+import { getCats } from "../redux/categorySlice";
+
 
 
 function AddGig() {
 
-    const [cats, setCats] = useState([]);
+    //const [cats, setCats] = useState([]);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('');
@@ -17,13 +20,21 @@ function AddGig() {
     const navigate = useNavigate();
 
     const [createGig] = useMutation(ADD_GIG);
+    const dispatch = useDispatch();
+    const categories = useSelector((state) => state.categories);
+    const { cats, status, error } = categories;
+    // useEffect(() => {
+    //     getCategories().then((result) => {
+    //         setCats(result);
+    //       })
+    //       .catch((error) => console.log(error));
+    //   }, []);
 
     useEffect(() => {
-        getCategories().then((result) => {
-            setCats(result);
-          })
-          .catch((error) => console.log(error));
-      }, []);
+      if (status === "idle") {
+        dispatch(getCats());
+      }
+    }, [dispatch, status]);
 
       const handleSubmit = async (e) => {
         e.preventDefault();
@@ -93,11 +104,11 @@ function AddGig() {
             className="mt-1 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md shadow-sm"
           >
             <option value="">Select a category</option>
-            {cats.map((category) => (
+            {status=="successful"?(cats.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.label}
               </option>
-            ))}
+            ))):<option>Loading ...</option>}
           </select>
         </div>
 

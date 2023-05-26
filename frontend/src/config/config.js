@@ -7,10 +7,10 @@ export const api = axios.create({
 });
 
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:8000/graphql',
+  uri: "http://localhost:8000/graphql",
 });
 
 export const client = new ApolloClient({
   link: uploadLink,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });

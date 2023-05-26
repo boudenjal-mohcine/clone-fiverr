@@ -4,24 +4,34 @@ import SubMenu from "./SubMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import "../styles/Navbar.css";
 import { getCategories } from "../api/categoryAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { getCats } from "../redux/categorySlice";
 
 function Navbar() {
-
   const [isImage1Visible, setImage1Visible] = useState(true);
   const [active, setActive] = useState(false);
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [cats, setCats] = useState([]);
+  //const [cats, setCats] = useState([]);
 
-  useEffect(() => {
-    getCategories().then((result) => {
-        setCats(result);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  // const dispatch = useDispatch();
+  const categories = useSelector((state) => state.categories);
+  const { cats, status, error } = categories;
 
+  // useEffect(() => {
+  //   getCategories().then((result) => {
+  //       setCats(result);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, []);
+
+  // useEffect(() => {
+  //   if (status === "idle") {
+  //     dispatch(getCats());
+  //   }
+  // }, [dispatch, status]);
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -115,73 +125,78 @@ function Navbar() {
             )}
           </div>
         </div>
+
         {(active || pathname !== "/") && (
           <>
             <hr />
-            <SubMenu items={cats}/>
+            <SubMenu />
             <hr />
           </>
         )}
       </div>
-      {(pathname === "/") && 
-    (  <div className="featured">
-        <div className="container">
-          <div className="left">
-            <h1>
-              {" "}
-              Discover the Ideal<i> Freelance </i> Services to Boost Your
-              Business
-            </h1>
-            <div className="search">
-              <div className="searchInput">
-                <img src="images/search.png" alt="" />
-                <input
-                  text="text"
-                  placeholder="Try building mobile app"
-                  onChange={(e) => setInput(e.target.value)}
-                />
+      {pathname === "/" && (
+        <div className="featured">
+          <div className="container">
+            <div className="left">
+              <h1>
+                {" "}
+                Discover the Ideal<i> Freelance </i> Services to Boost Your
+                Business
+              </h1>
+              <div className="search">
+                <div className="searchInput">
+                  <img src="images/search.png" alt="" />
+                  <input
+                    text="text"
+                    placeholder="Try building mobile app"
+                    onChange={(e) => setInput(e.target.value)}
+                  />
+                </div>
+                <button onClick={handleSubmit}>Search</button>
               </div>
-              <button onClick={handleSubmit}>Search</button>
+              <div className="popular">
+                <span>Popular: </span>
+                {status == "successful" ? (
+                  cats.slice(0, 4).map((cat, index) => (
+                    <button key={index}>
+                      <Link className="link" to={`{/gigs?cat=${cat.id}`}>
+                        {cat.label}
+                      </Link>
+                    </button>
+                  ))
+                ) : (
+                  <div>Loading ...</div>
+                )}
+              </div>
             </div>
-            <div className="popular">
-              <span>Popular: </span>
-              {(cats.slice(0,4)).map((cat,index) => (
-                <button key={index} >
-                <Link className="link" to={`{/gigs?cat=${cat.id}`}>
-                  {cat.label}
-                </Link>
-              </button>
-              ))}
+            <div className="right">
+              <AnimatePresence mode="wait">
+                {isImage1Visible ? (
+                  <motion.img
+                    key="person1"
+                    src="images/person1.png"
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={transitionVariants}
+                    transition={{ duration: 0.5 }}
+                  />
+                ) : (
+                  <motion.img
+                    key="person2"
+                    src="images/person2.png"
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={transitionVariants}
+                    transition={{ duration: 0.5 }}
+                  />
+                )}
+              </AnimatePresence>
             </div>
-          </div>
-          <div className="right">
-            <AnimatePresence mode="wait">
-              {isImage1Visible ? (
-                <motion.img
-                  key="person1"
-                  src="images/person1.png"
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={transitionVariants}
-                  transition={{ duration: 0.5 }}
-                />
-              ) : (
-                <motion.img
-                  key="person2"
-                  src="images/person2.png"
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={transitionVariants}
-                  transition={{ duration: 0.5 }}
-                />
-              )}
-            </AnimatePresence>
           </div>
         </div>
-      </div>)
-}
+      )}
     </>
   );
 }
