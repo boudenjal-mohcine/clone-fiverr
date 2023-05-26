@@ -29,6 +29,8 @@ const mutations = {
   createGig: async (parent, args) => {
     const { seller, title, description, price, category } = args;
     const image = await args.banner;
+    let banner = "default.jpg"
+    if(image){
     const { filename, createReadStream } = image.file;
     let stream = createReadStream();
     let { ext, name } = parse(filename);
@@ -44,7 +46,7 @@ const mutations = {
     let writeStream = createWriteStream(serverFile);
     stream.pipe(writeStream);
     await finished(writeStream);
-
+    }
     const gig = new Gig({
       seller,
       title,

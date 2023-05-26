@@ -123,7 +123,8 @@ function Navbar() {
           </>
         )}
       </div>
-      <div className="featured">
+      {(pathname === "/") && 
+    (  <div className="featured">
         <div className="container">
           <div className="left">
             <h1>
@@ -179,7 +180,8 @@ function Navbar() {
             </AnimatePresence>
           </div>
         </div>
-      </div>
+      </div>)
+}
     </>
   );
 }
