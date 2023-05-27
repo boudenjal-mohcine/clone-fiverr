@@ -15,6 +15,7 @@ function App() {
       <Route path='/' exact element={<GigsView/>} />
       <Route path='/gigs/cat/:id' exact element={<GigsView/>} />
       <Route path='/gigs/add' element={<AddGig/>} />
+      <Route path='/seller/' element={<AddGig/>} />
       <Route path='/gigs/view/:id' element={<GigDetails/>} />
     </Routes>
     <Footer/>
