@@ -74,7 +74,7 @@ function Navbar() {
 
   return (
     <>
-      <div className={active || pathname !== "/" ? "navbar active" : "navbar"}>
+      <div className={active || pathname !== "/" ? "navbar active bg-indigo-600" : "navbar bg-indigo-600"}>
         <div className="container">
           <div className="logo">
             <Link to="/" className="link">
@@ -147,7 +147,7 @@ function Navbar() {
         )}
       </div>
       {pathname === "/" && (
-        <div className="featured">
+        <div className="featured bg-indigo-600">
           <div className="container">
             <div className="left">
               <h1>
@@ -195,8 +195,8 @@ function Navbar() {
                   />
                 ) : (
                   <motion.img
-                    key="person2"
-                    src="images/person2.png"
+                    key="person3"
+                    src="images/person3.png"
                     initial="initial"
                     animate="animate"
                     exit="exit"

@@ -115,7 +115,7 @@ const Footer = () => {
               </ul>
             </div>
           </div>
-          <div class="px-4 py-6 bg-[#1e1e7e]  md:flex md:items-center md:justify-between">
+          <div class="px-4 py-6 bg-indigo-600 md:flex md:items-center md:justify-between">
             <span class="text-sm text-white  sm:text-center">
               © 2023 <a href="https://flowbite.com/">Bricolli</a>. All Rights
               Reserved.

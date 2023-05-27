@@ -41,7 +41,7 @@ function GigsView() {
 
   return (
     <>
-      <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center p-4">
+      <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center p-4 my-20">
         {(status === "successful" && state_cats === "successful") ||
           (!id ? "Popular gigs" : cats[id].label + " Gigs")}
       </h1>
