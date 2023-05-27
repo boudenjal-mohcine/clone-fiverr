@@ -8,6 +8,7 @@ const gigSchema = mongoose.Schema(
       ref: 'Seller',
       required: true,
     },
+    banner: { type: String },
     title: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },
@@ -23,6 +24,7 @@ const gigSchema = mongoose.Schema(
       ref: 'Review',
     }],
   },
+  
   { timestamps: true }
 );
 

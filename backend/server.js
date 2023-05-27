@@ -8,13 +8,18 @@ const db = require('./config/db_connection');
 const { join } = require('path');
 const userRoutes = require('./routes/user');
 const auth = require('./src/middleware/auth');
+const categoryRoutes = require('./routes/category')
+const gigRoutes = require('./routes/gig')
 
 const {
   graphqlUploadExpress 
 } = require('graphql-upload');
-const { json } = require("body-parser");
+const path = require("path");
+
+
 async function startServer() {
   const app = express();
+  
   app.use(express.json(),cors());
   const apolloServer = new ApolloServer({
     typeDefs,
@@ -22,12 +27,16 @@ async function startServer() {
     csrfPrevention: false // we will enable it when we build the front side
   });
 
+  app.use('/banners', express.static(__dirname + '/src/uploads/banners'));
+  app.use('/profiles', express.static(__dirname + '/src/uploads/profiles'));
 
   await apolloServer.start();
-  app.use(express.static(join(__dirname, './uploads')));
+  app.use('/static', express.static(__dirname + '/public'));
+  app.use(graphqlUploadExpress());
   app.use("/graphql",expressMiddleware(apolloServer));
   app.use("/api/auth", userRoutes);
-  app.use(graphqlUploadExpress());
+  app.use("/api/category", categoryRoutes);
+  app.use("/api/gig", gigRoutes);
 
   return app;
 }

@@ -2,6 +2,12 @@ const { mongoose } = require("mongoose");
 const Gig = require("../../models/gig");
 const Seller = require("../../models/seller");
 const Category = require("../../models/category");
+const { join, parse } = require("path");
+const { GraphQLUpload } = require("graphql-upload");
+const { createWriteStream, unlink } = require("fs");
+const { finished } = require("stream/promises");
+const sharp = require("sharp");
+
 
 const queries = {
   // gigs: async () => await Gig.find(),
@@ -24,12 +30,46 @@ const queries = {
 const mutations = {
   createGig: async (parent, args) => {
     const { seller, title, description, price, category } = args;
+    const image = await args.banner;
+    let banner = "default.jpg";
+    if (image) {
+      const { filename, createReadStream } = image.file;
+      let stream = createReadStream();
+      let { ext, name } = parse(filename);
+
+      let serverFile = join(__dirname, `../../uploads/banners/${filename}`);
+
+      let writeStream = createWriteStream(serverFile);
+      stream.pipe(writeStream);
+      await finished(writeStream);
+
+      console.log("ffff" + serverFile);
+      banner =
+        name.replace(/([^a-z0-9 ]+)/gi, "-").replace(" ", "_") +
+        "-" +
+        Date.now() +
+        ext;
+
+      sharp(serverFile)
+        .resize({ height: 250, width: 400 })
+        .toFile(join(__dirname, `../../uploads/banners/${banner}`))
+        .then(async function () {
+          unlink(serverFile, (err) => {
+            if (err) console.log(err);
+          });
+          console.log("Success");
+        })
+        .catch(function () {
+          console.log("Error occured");
+        });
+    }
     const gig = new Gig({
       seller,
       title,
       description,
       price,
       category,
+      banner,
     });
     const gigSeller = await Seller.findById(
       new mongoose.Types.ObjectId(seller).toString()
@@ -59,6 +99,39 @@ const mutations = {
 
   updateGig: async (parent, args) => {
     const { id, ...updatedFields } = args;
+    const newBanner = await args.banner;
+
+    if (newBanner) {
+      // Delete old image if it exists
+      const gigToUpdate = await Gig.findById(id);
+      if (gigToUpdate.banner) {
+        const oldBannerPath = join(__dirname, `../uploads/banners/${banner}`);
+        unlink(oldBannerPath, (err) => {
+          if (err) console.log(err);
+        });
+      }
+
+      // Save new image
+      const image = await args.banner;
+      const { filename, createReadStream } = image.file;
+      let stream = createReadStream();
+      let { ext, name } = parse(filename);
+
+      let banner =
+        name.replace(/([^a-z0-9]+)/gi, "-").replace(" ", "_") +
+        "-" +
+        Date.now() +
+        ext;
+
+      let serverFile = join(__dirname, `../../uploads/banners/${banner}`);
+
+      let writeStream = createWriteStream(serverFile);
+      stream.pipe(writeStream);
+      await finished(writeStream);
+
+      updatedFields.banner = banner;
+    }
+
     const result = await Gig.findByIdAndUpdate(id, updatedFields, {
       new: true,
     });
@@ -99,6 +172,7 @@ const mutations = {
 };
 
 const resolvers = {
+  Upload: GraphQLUpload,
   Query: queries,
   Mutation: mutations,
 };

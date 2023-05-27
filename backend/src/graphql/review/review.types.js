@@ -5,7 +5,7 @@ scalar DateTime
 type Review {
   id: ID!
   gig: Gig!
-  userId: String
+  user: User!
   rating: Float!
   comment: String
   createdAt: DateTime
@@ -14,7 +14,7 @@ type Review {
 
 #mutations
 type Mutation {
-  createReview(gig: String!, rating: Float, comment: String): Review
+  createReview(gig: String!, rating: Float, comment: String,  user: String!): Review
 }
 
 #queries

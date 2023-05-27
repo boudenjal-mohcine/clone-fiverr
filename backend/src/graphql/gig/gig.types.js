@@ -1,5 +1,7 @@
 const types = `
 scalar DateTime
+scalar Upload
+
 
 #typedef
 type Gig {
@@ -7,6 +9,7 @@ type Gig {
     seller: Seller!
     orders: [Order]
     reviews: [Review]
+    banner: String
     title: String!
     description: String!
     price: Float!
@@ -17,8 +20,8 @@ type Gig {
 
 #mutations
 type Mutation {
-    createGig(seller: String!, title: String!, description: String!, price: Float!, category: String!): Gig
-    updateGig(id: ID!, title: String, description: String, price: Float): Gig
+    createGig(seller: String!,banner: Upload, title: String!, description: String!, price: Float!, category: String!): Gig
+    updateGig(id: ID!,banner: Upload, title: String, description: String, price: Float): Gig
     deleteGig(id: ID!): Gig
 }
 

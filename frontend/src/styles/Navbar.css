@@ -1,0 +1,209 @@
+*{
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+}
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1e1e7e;
+    color: white;
+    position: sticky;
+    top: 0;
+    transition: 0.5s all ease;
+    z-index: 999;
+  }
+  
+  .navbar.active {
+    background-color: white;
+    color: black;
+  }
+  
+  .navbar .container {
+    width: 95vw;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0px;
+  }
+  
+  .navbar .container .logo {
+    font-size: 34px;
+    font-weight: bold;
+  }
+
+  .navbar .container .logo .dot {
+    color: #1dbf73;
+  }
+  
+  .navbar .container .links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    font-weight: 500;
+    font-family: "Montserrat", "sans-serif";
+  }
+  
+  .navbar .container .links .user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+  }
+  
+  .navbar .container .links .user img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .navbar .container .links .user .options {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid lightgrey;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: gray;
+    width: 200px;
+    font-weight: 300;
+  }
+  
+  .navbar .container .links button {
+    color:  #c19696;
+    background-color: transparent;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #c19696;
+  }
+  
+  .navbar .container .links button:hover {
+    color: #1dbf73
+  }
+  
+  .navbar hr {
+    width: 100%;
+    height: 0;
+    border: .5px solid rgb(228, 227, 227);
+  }
+  
+  .navbar .menu {
+    width: 95vw;
+    padding: 10px 0px;
+    display: flex;
+    justify-content: space-around;
+    margin-left: 10px ;
+    font-weight: 300;
+    align-items: center;
+    color: gray;
+    font-family: "Montserrat", "sans-serif";
+  }
+  
+  /*  */
+
+  .featured {
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    background-color: #1e1e7e;
+    color: white;
+  }
+  
+  .featured .container {
+    width: 95vw;
+    display: flex;
+    align-items: center;
+  }
+  
+  .featured .container .left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+  }
+  
+  .featured .container .left h1 {
+    font-size: 50px;
+  }
+  
+  .featured .container .left h1 i {
+    font-weight: 300;
+  }
+  
+  .featured .container .left .search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 5px;
+  }
+  
+  .featured .container .left .search .searchInput {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .featured .container .left .search .searchInput img {
+    width: 20px;
+    height: 20px;
+    margin: 10px;
+  }
+  
+  .featured .container .left .search .searchInput input {
+    border: none;
+    outline: none;
+  }
+  
+  .featured .container .left .search button {
+    width: 120px;
+    height: 50px;
+    border: none;
+    background-color: #c19696;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .featured .container .left .popular {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .featured .container .left .popular button {
+    color: white;
+    background-color: transparent;
+    border: 1px solid white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  
+
+  .featured .right {
+    display: none
+  }
+
+  @media (min-width: 1024px) {
+  
+    .featured .right {
+      display: block; /* Added */
+      height: 100%;
+      width: 100%;
+    }
+  
+    .featured .right img {
+      height: 100%;
+      object-fit: contain;
+      width: 90%;
+      margin-left: 10%;
+      margin-top: 5px;
+    }
+  }

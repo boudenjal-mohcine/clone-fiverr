@@ -14,7 +14,7 @@ var storage = multer.diskStorage({
 
     
     destination: (req, file, cb) => {
-      cb(null, 'src/uploads')
+      cb(null, '/uploads/profiles')
     },
     filename: (req, file, cb) => {
         const name =((file.originalname.split('.')[0]).split(' ').join('_'))
