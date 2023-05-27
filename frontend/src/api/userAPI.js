@@ -22,7 +22,7 @@ export const register = async (userCredentials) => {
     formData.append('username', userCredentials.username);
     formData.append('email', userCredentials.email);
     formData.append('password', userCredentials.password);
-    formData.append('image', userCredentials.image);
+    formData.append('image', userCredentials?.image);
     formData.append('country', userCredentials.country);
 
     try {

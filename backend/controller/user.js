@@ -2,7 +2,11 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../src/models/user')
 exports.signup = (req, res, next) => {
-    const file = req.file.filename
+
+    let file = "avatar.png";
+    if (req.file != null) {
+      file = req.file.filename
+    }
     console.log("================"+file);
     bcrypt.hash(req.body.password, 10).then(
       (hash) => {

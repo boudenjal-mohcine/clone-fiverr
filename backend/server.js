@@ -30,7 +30,6 @@ async function startServer() {
   app.use('/banners', express.static(__dirname + '/src/uploads/banners'));
   app.use('/profiles', express.static(__dirname + '/src/uploads/profiles'));
   app.use("/api/auth", userRoutes);
-
   await apolloServer.start();
   app.use('/static', express.static(__dirname + '/public'));
   app.use(graphqlUploadExpress());
