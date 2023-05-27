@@ -16,12 +16,29 @@ export const login = async (userCredentials) => {
 };
 
 export const register = async (userCredentials) => {
+    const formData = new FormData();
+  
+    // Append form fields to the formData object
+    formData.append('username', userCredentials.username);
+    formData.append('email', userCredentials.email);
+    formData.append('password', userCredentials.password);
+    formData.append('image', userCredentials.image);
+    formData.append('country', userCredentials.country);
 
-    const request = await axios.post(`http://localhost:8000/api/auth/register`,userCredentials);
-    const response = await request.data;
-
-    return response;
-};
+    try {
+      const response = await axios.post('http://localhost:8000/api/auth/signup', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      // Handle error
+      console.error(error);
+      throw error;
+    }
+  };
+  
 
 
 

@@ -29,12 +29,12 @@ async function startServer() {
 
   app.use('/banners', express.static(__dirname + '/src/uploads/banners'));
   app.use('/profiles', express.static(__dirname + '/src/uploads/profiles'));
+  app.use("/api/auth", userRoutes);
 
   await apolloServer.start();
   app.use('/static', express.static(__dirname + '/public'));
   app.use(graphqlUploadExpress());
   app.use("/graphql",expressMiddleware(apolloServer));
-  app.use("/api/auth", userRoutes);
   app.use("/api/category", categoryRoutes);
   app.use("/api/gig", gigRoutes);
 

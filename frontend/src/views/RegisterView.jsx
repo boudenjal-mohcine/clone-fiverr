@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../styles/Login.css";
+import { register } from '../api/userAPI';
 
 const RegisterView = () => {
   const [username, setUsername] = useState('');
@@ -8,7 +9,7 @@ const RegisterView = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [country, setCountry] = useState('');
-  const [profile, setProfile] = useState(null);
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
   const handleRegister = (e) => {
@@ -18,16 +19,29 @@ const RegisterView = () => {
       return;
     }
     // Registration logic here
-    console.log('Form submitted:', { username, email, password, country, profile });
+    console.log('Form submitted:', { username, email, password, country, image });
+
+    // call api
+    register({ username, email, password, country, image }).then((response)=>{
+        alert(response.message)
+    }).catch((err)=>{
+        alert(err)
+    })
+
     // Reset form fields
     setUsername('');
     setEmail('');
     setPassword('');
     setConfirmPassword('');
     setCountry('');
-    setProfile(null);
+    setImage(null);
     // // Navigate to home or desired route
     // navigate('/');
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
   };
   const countryOptions = [
     { code: 'AF', name: 'Afghanistan' },
@@ -144,7 +158,7 @@ const RegisterView = () => {
             id="profile"
             type="file"
             accept="image/*"
-            onChange={(e) => setProfile(e.target.files[0])}
+            onChange={handleImageChange}
             className="mt-1 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md shadow-sm"
           />
         </div>
