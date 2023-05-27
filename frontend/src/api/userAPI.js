@@ -14,3 +14,14 @@ export const login = async (userCredentials) => {
 
     return response;
 };
+
+export const register = async (userCredentials) => {
+
+    const request = await axios.post(`http://localhost:8000/api/auth/register`,userCredentials);
+    const response = await request.data;
+
+    return response;
+};
+
+
+

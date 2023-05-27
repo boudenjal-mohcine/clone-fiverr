@@ -6,6 +6,7 @@ import AddGig from './views/AddGig';
 import GigDetails from './views/GigDetails';
 import Footer from './components/Footer';
 import LoginView from './views/LoginView';
+import RegisterView from './views/RegisterView';
 
   
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path='/seller/' element={<AddGig/>} />
       <Route path='/gigs/view/:id' element={<GigDetails/>} />
       <Route path='/login' element={<LoginView/>} />
+      <Route path='/register' element={<RegisterView/>} />
     </Routes>
     <Footer/>
   </Router>
