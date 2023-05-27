@@ -25,7 +25,10 @@ function Navbar() {
   //     .catch((error) => console.log(error));
   // }, []);
 
-  localStorage.setItem("currentUser",JSON.stringify({username:"mohcine",isSeller:true}))
+  localStorage.setItem(
+    "currentUser",
+    JSON.stringify({ username: "mohcine", isSeller: true })
+  );
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -84,7 +87,7 @@ function Navbar() {
                 </Link>
               </button>
             )}
-             {currentUser && !currentUser?.isSeller && (
+            {currentUser && !currentUser?.isSeller && (
               <button>
                 <Link className="link" to="/register">
                   Become a seller
@@ -160,7 +163,7 @@ function Navbar() {
                 {status === "successful" ? (
                   cats.slice(0, 4).map((cat, index) => (
                     <button key={index}>
-                      <Link className="link" to={`{/gigs?cat=${cat.id}`}>
+                      <Link className="link" to={`/gigs/cat/${index}`}>
                         {cat.label}
                       </Link>
                     </button>

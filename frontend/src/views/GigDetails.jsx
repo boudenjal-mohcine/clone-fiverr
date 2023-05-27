@@ -1,9 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllGigs } from "../redux/gigSlice";
 import React, { useEffect, useState } from "react";
 import GigCard from "../components/GigCard";
-import { useLocation } from "react-router-dom";
 
 function GigDetails() {
   const [activeTab, setActiveTab] = useState("details");
@@ -19,13 +18,12 @@ function GigDetails() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    setActiveTab("details")
+    setActiveTab("details");
 
     if (status === "idle") {
       dispatch(getAllGigs());
     }
-    
-  }, [dispatch, status,location]);
+  }, [dispatch, status, location]);
 
   const gig = gigs[id];
   const url = "http://127.0.0.1:8000/banners/";
@@ -298,7 +296,7 @@ function GigDetails() {
           </div>
           <div className="px-8">
             <h1 className="text-2xl font-bold my-4 text-center my-5">
-              More {gig.category.label} Services{" "}
+              More {gig.category.label} Gigs{" "}
             </h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-3">
               {gigs.map((gig, index) =>

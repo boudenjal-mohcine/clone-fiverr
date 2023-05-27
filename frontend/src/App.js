@@ -12,6 +12,7 @@ function App() {
     <Navbar />
     <Routes>
       <Route path='/' exact element={<GigsView/>} />
+      <Route path='/gigs/cat/:id' exact element={<GigsView/>} />
       <Route path='/gigs/add' element={<AddGig/>} />
       <Route path='/gigs/view/:id' element={<GigDetails/>} />
 
