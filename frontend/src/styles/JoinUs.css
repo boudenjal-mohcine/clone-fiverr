@@ -1,0 +1,6 @@
+.bg-image {
+    background-image: url('http://localhost:3000/images/conference1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+

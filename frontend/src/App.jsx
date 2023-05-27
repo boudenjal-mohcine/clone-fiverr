@@ -5,7 +5,7 @@ import GigsView from './views/GigsView';
 import AddGig from './views/AddGig';
 import GigDetails from './views/GigDetails';
 import Footer from './components/Footer';
-import { Login } from './views/Login';
+import LoginView from './views/LoginView';
 
   
 function App() {
@@ -18,7 +18,7 @@ function App() {
       <Route path='/gigs/add' element={<AddGig/>} />
       <Route path='/seller/' element={<AddGig/>} />
       <Route path='/gigs/view/:id' element={<GigDetails/>} />
-      <Route path='/login' element={<Login/>} />
+      <Route path='/login' element={<LoginView/>} />
     </Routes>
     <Footer/>
   </Router>
