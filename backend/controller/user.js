@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../src/models/user')
 exports.signup = (req, res, next) => {
+require("dotenv").config();
 
     let file = "avatar.png";
     if (req.file != null) {
@@ -38,7 +39,8 @@ exports.signup = (req, res, next) => {
 
 
       exports.login = async (req, res, next) => {
-        await User.findOne({ email: req.body.email }).then(
+        console.log(req.body);
+        await (User.findOne({ email: req.body.email }).populate("seller").populate("buyer").exec()).then(
           (user) => {
             if (!user) {
               return res.status(401).json({
@@ -53,10 +55,10 @@ exports.signup = (req, res, next) => {
                   });
                 }
                 const token = jwt.sign(
-                  { userId: user._id },'JWT_TOKEN_SECRET',
+                  { userId: user._id },process.env.JWT_SECRET,
                   { expiresIn: '100h' });
                 res.status(200).json({
-                  userId: user._id,
+                  user: user,
                   token: token
                 });
               }

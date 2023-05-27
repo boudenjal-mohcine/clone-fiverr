@@ -95,7 +95,7 @@ function Navbar() {
                 </Link>
               </button>
             )}
-            {currentUser && !currentUser?.isSeller && (
+            {currentUser && !currentUser.user?.isSeller && (
               <button>
                 <Link className="link" to="/register">
                   Become a seller
@@ -106,15 +106,14 @@ function Navbar() {
               <div className="user" onClick={() => setOpen(!open)}>
                 <img
                   src={
-                    currentUser?.img ||
-                    "https://ionicframework.com/docs/img/demos/avatar.svg"
+                    `http://localhost:8000/profiles/${currentUser.user.profilePicture}`
                   }
                   alt="user"
                 />
-                <span>{currentUser?.username}</span>
+                <span>{currentUser.user.username}</span>
                 {open && (
                   <div className="options">
-                    {currentUser?.isSeller && (
+                    {currentUser.user?.isSeller && (
                       <>
                         <Link className="link" to="/mygigs">
                           Gigs

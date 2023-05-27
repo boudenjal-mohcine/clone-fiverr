@@ -29,6 +29,12 @@ function AddGig() {
     //       .catch((error) => console.log(error));
     //   }, []);
 
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+
+    if(!currentUser)
+      navigate('/login')
+
+
     useEffect(() => {
       if (status === "idle") {
         dispatch(getCats());
@@ -57,7 +63,7 @@ function AddGig() {
     
     
 
-    return ( <div>
+    return (<>{ currentUser && <div>
     <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center p-4">
          Add gig
       </h1> 
@@ -148,7 +154,8 @@ function AddGig() {
         </div>
       </form>
     </div>   
-      </div> );
+      </div>
+      }</>);
 }
 
 export default AddGig;
