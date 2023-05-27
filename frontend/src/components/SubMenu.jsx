@@ -6,7 +6,7 @@ import { getCats } from "../redux/categorySlice";
 function SubMenu() {
   const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories);
-  const { cats, status, error } = categories;
+  const { cats, status } = categories;
 
   useEffect(() => {
     if (status === "idle") {

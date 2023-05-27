@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getCategories } from "../api/categoryAPI";
+import { getGigs } from "../api/gigAPI";
 
 const initialState = {
-  cats: [],
+  gigs: [],
   status: "idle",
   error: null,
 };
 
 // Get all categories from the API
-export const getCats = createAsyncThunk(
-  "categories/getAll",
+export const getAllGigs = createAsyncThunk(
+  "gigs/getAll",
   async (thunkAPI) => {
     try {
-      const result = await getCategories();
+      const result = await getGigs();
       return result;
     } catch (err) {
       return thunkAPI.rejectWithValue({ error: err.message });
@@ -20,22 +20,22 @@ export const getCats = createAsyncThunk(
   }
 );
 
-const categorySlice = createSlice({
-  name: "categories",
+const gigSlice = createSlice({
+  name: "gigs",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getCats.pending, (state, action) => {
+      .addCase(getAllGigs.pending, (state, action) => {
         // When data is being fetched
         state.status = "loading";
       })
-      .addCase(getCats.fulfilled, (state, action) => {
+      .addCase(getAllGigs.fulfilled, (state, action) => {
         // When data is fetched successfully
         state.status = "successful";
-        state.cats = action.payload;
+        state.gigs = action.payload;
       })
-      .addCase(getCats.rejected, (state, action) => {
+      .addCase(getAllGigs.rejected, (state, action) => {
         // When data is fetched unsuccessfully
         state.status = "failed";
         // Update the error message for proper error handling
@@ -44,4 +44,4 @@ const categorySlice = createSlice({
   },
 });
 
-export default categorySlice.reducer;
+export default gigSlice.reducer;

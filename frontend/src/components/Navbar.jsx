@@ -3,9 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import SubMenu from "./SubMenu";
 import { motion, AnimatePresence } from "framer-motion";
 import "../styles/Navbar.css";
-import { getCategories } from "../api/categoryAPI";
-import { useDispatch, useSelector } from "react-redux";
-import { getCats } from "../redux/categorySlice";
+import { useSelector } from "react-redux";
 
 function Navbar() {
   const [isImage1Visible, setImage1Visible] = useState(true);
@@ -18,7 +16,7 @@ function Navbar() {
 
   // const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories);
-  const { cats, status, error } = categories;
+  const { cats, status } = categories;
 
   // useEffect(() => {
   //   getCategories().then((result) => {
@@ -27,11 +25,7 @@ function Navbar() {
   //     .catch((error) => console.log(error));
   // }, []);
 
-  // useEffect(() => {
-  //   if (status === "idle") {
-  //     dispatch(getCats());
-  //   }
-  // }, [dispatch, status]);
+  localStorage.setItem("currentUser",JSON.stringify({username:"mohcine",isSeller:true}))
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -90,6 +84,13 @@ function Navbar() {
                 </Link>
               </button>
             )}
+             {currentUser && !currentUser?.isSeller && (
+              <button>
+                <Link className="link" to="/register">
+                  Become a seller
+                </Link>
+              </button>
+            )}
             {currentUser && (
               <div className="user" onClick={() => setOpen(!open)}>
                 <img
@@ -107,7 +108,7 @@ function Navbar() {
                         <Link className="link" to="/mygigs">
                           Gigs
                         </Link>
-                        <Link className="link" to="/add">
+                        <Link className="link" to="/gigs/add">
                           Add New Gig
                         </Link>
                       </>
@@ -156,7 +157,7 @@ function Navbar() {
               </div>
               <div className="popular">
                 <span>Popular: </span>
-                {status == "successful" ? (
+                {status === "successful" ? (
                   cats.slice(0, 4).map((cat, index) => (
                     <button key={index}>
                       <Link className="link" to={`{/gigs?cat=${cat.id}`}>

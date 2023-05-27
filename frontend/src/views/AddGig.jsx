@@ -1,6 +1,5 @@
 import '../styles/Gigs.css'
 import React, { useState, useEffect } from "react";
-import { getCategories } from "../api/categoryAPI";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from '@apollo/client';
 import { ADD_GIG } from '../api/mutations';
@@ -22,7 +21,7 @@ function AddGig() {
     const [createGig] = useMutation(ADD_GIG);
     const dispatch = useDispatch();
     const categories = useSelector((state) => state.categories);
-    const { cats, status, error } = categories;
+    const { cats, status } = categories;
     // useEffect(() => {
     //     getCategories().then((result) => {
     //         setCats(result);
@@ -104,7 +103,7 @@ function AddGig() {
             className="mt-1 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md shadow-sm"
           >
             <option value="">Select a category</option>
-            {status=="successful"?(cats.map((category) => (
+            {status==="successful"?(cats.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.label}
               </option>
