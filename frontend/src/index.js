@@ -1,3 +1,12 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import reportWebVitals from './reportWebVitals';
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import { Provider } from 'react-redux';
+import store from './Store';
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -11,15 +20,9 @@ import { store } from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-      <ApolloProvider client={client}>
-      <Provider store={store}>
-
-        <App />
-        </Provider>
-
-      </ApolloProvider>
-  </React.StrictMode>
+<Provider store={store}>
+    <App />
+    </Provider>
 );
 
 // If you want your app to work offline and load faster, you can change
