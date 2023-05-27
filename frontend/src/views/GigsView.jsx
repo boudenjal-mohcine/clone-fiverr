@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { getCats } from "../redux/categorySlice";
 
 function GigsView() {
+  
   const dispatch = useDispatch();
   const random_gigs = useSelector((state) => state.gigs);
   const categories = useSelector((state) => state.categories);

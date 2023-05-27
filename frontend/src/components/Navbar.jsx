@@ -25,12 +25,12 @@ function Navbar() {
   //     .catch((error) => console.log(error));
   // }, []);
 
-  localStorage.setItem(
-    "currentUser",
-    JSON.stringify({ username: "mohcine", isSeller: true })
-  );
+  // localStorage.setItem(
+  //   "currentUser",
+  //   JSON.stringify({ username: "mohcine", isSeller: true })
+  // );
 
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   const handleSubmit = () => {
     navigate(`gigs?search=${input}`);
@@ -63,6 +63,14 @@ function Navbar() {
       window.removeEventListener("scroll", isActive);
     };
   }, []);
+
+
+  const handelLogout = () => {
+
+    localStorage.removeItem("user");
+    navigate("/")
+
+  }
 
   return (
     <>
@@ -122,7 +130,7 @@ function Navbar() {
                     <Link className="link" to="messages">
                       Messages
                     </Link>
-                    <Link className="link">Logout</Link>
+                    <Link className="link" onClick={handelLogout}>Logout</Link>
                   </div>
                 )}
               </div>

@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import {useDispatch} from 'react-redux';
-import { loginUser } from '../Store/userSlice';
+import { loginUser } from '../redux/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -10,7 +10,7 @@ export const Login = () => {
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
 //redux state
-const {loading,error}=useSelector((state)=>state.user);
+const {user,loading,error}=useSelector((state)=>state.user);
 
 
     const dispatch =useDispatch();
@@ -28,6 +28,7 @@ const {loading,error}=useSelector((state)=>state.user);
             }
         })
     }
+    console.log(user);
   return (
     <form className='from-group custom-from'>
       <lable>Email</lable>  
