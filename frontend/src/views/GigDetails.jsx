@@ -1,8 +1,9 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllGigs } from "../redux/gigSlice";
 import React, { useEffect, useState } from "react";
 import GigCard from "../components/GigCard";
+import { getCats } from "../redux/categorySlice";
 
 function GigDetails() {
   const [activeTab, setActiveTab] = useState("details");
@@ -13,6 +14,9 @@ function GigDetails() {
   const { id } = useParams();
   const allGigs = useSelector((state) => state.gigs);
   const { gigs, status } = allGigs;
+  const categories = useSelector((state) => state.categories);
+  const state_cats = categories.state;
+  const cats = categories.cats;
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -23,7 +27,10 @@ function GigDetails() {
     if (status === "idle") {
       dispatch(getAllGigs());
     }
-  }, [dispatch, status, location]);
+    if (state_cats === "idle") {
+      dispatch(getCats());
+    }
+  }, [dispatch, status, location, state_cats]);
 
   const gig = gigs[id];
   const url = "http://127.0.0.1:8000/banners/";
@@ -33,17 +40,82 @@ function GigDetails() {
   const same = gigs
     .filter((g) => g.category._id === gig.category._id && g._id !== gig._id)
     .map((g) => g._id);
-  console.log(same);
 
   return (
     <>
       {status === "successful" ? (
         <>
-          <h1 className="text-2xl font-bold my-4 text-center">Gig Details</h1>
           <div className="flex px-8 mt-8">
             <div className="w-2/3 pr-4">
               {/* Tabs */}
-              <div className="w-full bg-white border border-gray-200 rounded-lg shadow">
+              <div className="w-full bg-white border-gray-200 rounded-lg shadow">
+                <nav class="flex" aria-label="Breadcrumb">
+                  <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                      <Link
+                        to="/"
+                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          class="w-4 h-4 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Home
+                      </Link>
+                    </li>
+                    <li>
+                      <div class="flex items-center">
+                        <svg
+                          aria-hidden="true"
+                          class="w-6 h-6 text-gray-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                        <Link
+                          to={`/gigs/cat/${cats.findIndex(
+                            (c) => c.label === gig.category.label
+                          )}`}
+                          className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                        >
+                          {gig.category.label}
+                        </Link>
+                      </div>
+                    </li>
+                    <li aria-current="page">
+                      <div class="flex items-center">
+                        <svg
+                          aria-hidden="true"
+                          class="w-6 h-6 text-gray-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
+                          {gig.title}
+                        </span>
+                      </div>
+                    </li>
+                  </ol>
+                </nav>
+
                 <div className="sm:hidden">
                   <label htmlFor="tabs" className="sr-only">
                     Select tab
@@ -294,7 +366,7 @@ function GigDetails() {
               </div>
             </div>
           </div>
-          <div className="px-8">
+          <div className="px-8 py-10">
             <h1 className="text-2xl font-bold my-4 text-center my-5">
               More {gig.category.label} Gigs{" "}
             </h1>
@@ -306,6 +378,8 @@ function GigDetails() {
               )}
             </div>
           </div>
+          <hr />
+
         </>
       ) : (
         <div>Loading...</div>

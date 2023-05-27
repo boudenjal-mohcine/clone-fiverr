@@ -31,7 +31,6 @@ function GigsView() {
     }
   }, [dispatch, status, state_cats]);
 
-  console.log(gigs.length);
   let gigsOfCat = [];
   if (id && id < cats.length) {
     gigsOfCat = gigs

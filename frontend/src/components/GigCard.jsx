@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 function GigCard({ gig, index }) {
   const url = "http://127.0.0.1:8000/banners/";
 
-  console.log(index);
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow ">
       <Link
