@@ -12,6 +12,7 @@ import GigDetailsView from './views/GigDetailsView';
 import GigsByCategoryView from './views/GigsByCategoryView';
 import OrdersView from './views/OrdersView';
 import ClientOrdersView from './views/ClientOrdersView';
+import MessagesView from './views/MessagesView';
   
 function App() {
   return(
@@ -29,6 +30,7 @@ function App() {
       <Route path='/gigs/:gigId' element={<GigDetailsView/>} />
       <Route path='/orders' element={<OrdersView/>} />
       <Route path='/orders/:gigId' element={<ClientOrdersView/>} />
+      <Route path='/messages' element={<MessagesView/>} />
     </Routes>
     <Footer/>
   </Router>

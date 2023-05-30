@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { GET_SELLER } from "../api/mutations";
+import { useQuery,useMutation } from "@apollo/client";
+import { CREATE_CONVERSATION, GET_SELLER } from "../api/mutations";
 import { useParams } from "react-router-dom";
 import GigsList from "../components/GigsList";
 import { PlusIcon } from "@heroicons/react/solid";
@@ -11,6 +11,7 @@ function SellerProfileView() {
   const { loading, error, data } = useQuery(GET_SELLER, {
     variables: { sellerId },
   });
+  const [createConversation] = useMutation(CREATE_CONVERSATION)
   const [gigs, setGigs] = useState([]);
   const [seller, setSeller] = useState();
   const [user, setUser] = useState();
@@ -22,9 +23,9 @@ function SellerProfileView() {
 
   //get seller id
   const sellerid =
-    (currentUser && currentUser.user.isSeller)
-      ? currentUser.user.seller._id
-      : currentSeller?.id;
+    ((currentUser)?((currentUser.user.isSeller)
+    ? currentUser.user.seller._id
+    : currentSeller?.id):(null))
 
   useEffect(() => {
     if (data && data.seller) {
@@ -38,6 +39,16 @@ function SellerProfileView() {
     const date = new Date(timestamp);
     return date.toLocaleDateString();
   };
+
+  const handleCreateConversation = async() =>{
+
+    if(data)
+
+         alert(currentUser.user.username +"-"+seller.user.username);
+         await createConversation({variables:{users:[currentUser.user._id,seller.user.username]}})
+         
+  }
+
 
   console.log(seller);
   return (
@@ -59,12 +70,13 @@ function SellerProfileView() {
                   @{user.username}
                 </span>
                 <div className="flex mt-4 space-x-3 md:mt-6">
-                  <a
+                 {currentUser && sellerid!==data.seller.id && <button
+                    onClick={handleCreateConversation}
                     href="#"
                     className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
                   >
                     Message
-                  </a>
+                  </button>}
                 </div>
               </div>
               <p className="text-md px-5">

@@ -78,6 +78,7 @@ function Navbar() {
     navigate("/login");
   };
 
+  console.log(currentUser);
   return (
     <>
       <div
