@@ -46,6 +46,7 @@ exports.login = async (req, res, next) => {
   await User.findOne({ email: req.body.email })
     .populate("seller")
     .populate("buyer")
+    .populate("conversations")
     .exec()
     .then((user) => {
       if (!user) {

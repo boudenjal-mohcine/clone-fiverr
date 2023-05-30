@@ -40,6 +40,10 @@ export const BECOME_SELLER = gql`
       last_name
       skills
       createdAt
+      user{
+        id
+        username
+      }
     }
   }
 `;
@@ -60,6 +64,7 @@ export const GET_SELLER = gql`
       }
       id
       user {
+        id
         country
         email
         username
@@ -200,4 +205,49 @@ export const ADD_REVIEW = gql`
       id
     }
   }
+`;
+
+
+export const CREATE_CONVERSATION = gql`
+mutation Mutation($users: [String!]!) {
+  createConversation(users: $users) {
+    id
+    users {
+      id
+      username
+    }
+  }
+}
+`;
+
+
+export const GET_CONVERSATION = gql`
+query ConversationsUser($ids: [ID!]) {
+  conversationsUser(ids: $ids) {
+    id
+    users {
+      id
+      profilePicture
+      username
+    }
+    messages {
+      senderUsername
+      content
+      createdAt
+      status
+    }
+  }
+}
+`;
+
+
+export const SEND_MESSAGE = gql`
+mutation CreateMessage($user: String!, $conversation: String!, $content: String!) {
+  createMessage(user: $user, conversation: $conversation, content: $content) {
+    senderUsername
+    content
+    status
+    createdAt
+  }
+}
 `;

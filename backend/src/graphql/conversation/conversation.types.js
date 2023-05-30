@@ -19,7 +19,9 @@ type Mutation {
 #queries
 type Query {
     conversations: [Conversation]
-    conversation(id: ID!): Conversation 
+    conversation(id: ID!): Conversation
+    conversationsUser(ids:[ID!]): [Conversation]
+
 }
 `;
 
