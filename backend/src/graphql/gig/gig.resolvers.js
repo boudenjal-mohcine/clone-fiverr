@@ -43,7 +43,6 @@ const mutations = {
       stream.pipe(writeStream);
       await finished(writeStream);
 
-      console.log("ffff" + serverFile);
       banner =
         name.replace(/([^a-z0-9 ]+)/gi, "-").replace(" ", "_") +
         "-" +
@@ -99,13 +98,14 @@ const mutations = {
 
   updateGig: async (parent, args) => {
     const { id, ...updatedFields } = args;
-    const newBanner = await args.banner;
-
-    if (newBanner) {
+    console.log(args);
+    if (await args.banner !== null && await args.banner !== undefined) {
       // Delete old image if it exists
       const gigToUpdate = await Gig.findById(id);
-      if (gigToUpdate.banner) {
-        const oldBannerPath = join(__dirname, `../uploads/banners/${banner}`);
+      console.log(gigToUpdate.banner);
+      if (gigToUpdate && gigToUpdate.banner!=="default.jpg") {
+        const oldBannerPath = join(__dirname, `../../uploads/banners/${gigToUpdate.banner}`);
+        console.log(gigToUpdate.banner);
         unlink(oldBannerPath, (err) => {
           if (err) console.log(err);
         });
@@ -113,9 +113,12 @@ const mutations = {
 
       // Save new image
       const image = await args.banner;
+      if(image){
       const { filename, createReadStream } = image.file;
       let stream = createReadStream();
       let { ext, name } = parse(filename);
+
+      console.log("3");
 
       let banner =
         name.replace(/([^a-z0-9]+)/gi, "-").replace(" ", "_") +
@@ -129,7 +132,32 @@ const mutations = {
       stream.pipe(writeStream);
       await finished(writeStream);
 
+      console.log("4");
+
+       banner =
+      name.replace(/([^a-z0-9]+)/gi, "-").replace(" ", "_") +
+      "-" +
+      Date.now() +
+      ext;
+      sharp(serverFile)
+        .resize({ height: 250, width: 400 })
+        .toFile(join(__dirname, `../../uploads/banners/${banner}`))
+        .then(async function () {
+          unlink(serverFile, (err) => {
+            if (err) console.log(err);
+          });
+          console.log("Success");
+        })
+        .catch(function () {
+          console.log("Error occured");
+        });
+
+        console.log("5");
+
+      
+
       updatedFields.banner = banner;
+      }
     }
 
     const result = await Gig.findByIdAndUpdate(id, updatedFields, {

@@ -9,6 +9,7 @@ const RegisterView = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [country, setCountry] = useState('');
+  const [payement_method, setPayementMethod] = useState('');
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
@@ -35,8 +36,8 @@ const RegisterView = () => {
     setConfirmPassword('');
     setCountry('');
     setImage(null);
-    // // Navigate to home or desired route
-    // navigate('/');
+    // Navigate to home or desired route
+     navigate('/login');
   };
 
   const handleImageChange = (e) => {
@@ -69,10 +70,18 @@ const RegisterView = () => {
     { code: 'YE', name: 'Yemen' },
     { code: 'ZM', name: 'Zambia' },
   ];
+
+  const methods = [
+    "Paypal","MasterCard","VisaCard"
+  ]
   
 
   const handleCountryChange = (e) => {
     setCountry(e.target.value);
+  };
+
+  const handleMethodChange = (e) => {
+    setPayementMethod(e.target.value);
   };
 
   return (
@@ -146,6 +155,25 @@ const RegisterView = () => {
             {countryOptions.map((option) => (
               <option key={option.code} value={option.code}>
                 {option.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="payment_method" className="block text-sm font-medium text-gray-700">
+            Payment Method
+          </label>
+          <select
+            id="payment_method"
+            required
+            value={payement_method}
+            onChange={handleMethodChange}
+            className="mt-1 px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-md shadow-sm"
+          >
+            <option value="">Select a Method</option>
+            {methods.map((option) => (
+              <option key={option} value={option}>
+                {option}
               </option>
             ))}
           </select>
