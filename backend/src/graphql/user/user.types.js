@@ -10,7 +10,6 @@ type User {
   username: String!
   email: String!
   password: String!
-  isBuyer: Boolean
   isSeller: Boolean
   profilePicture: String
   country:String

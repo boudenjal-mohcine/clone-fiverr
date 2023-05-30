@@ -28,6 +28,8 @@ type Mutation {
 type Query {
     orders: [Order]
     order(id: ID!): Order 
+    orderGig(gigId: ID!): [Order] 
+
 }
 `;
 

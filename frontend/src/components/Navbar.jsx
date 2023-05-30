@@ -30,7 +30,20 @@ function Navbar() {
   //   JSON.stringify({ username: "mohcine", isSeller: true })
   // );
 
+
   const currentUser = JSON.parse(localStorage.getItem("user"));
+
+  
+
+  const seller = JSON.parse(localStorage.getItem("seller"));
+
+  //get seller id
+  const sellerid =
+    currentUser && currentUser.user.isSeller
+      ? currentUser.user.seller._id
+      : seller?.id;
+
+
 
   const handleSubmit = () => {
     navigate(`gigs?search=${input}`);
@@ -46,10 +59,14 @@ function Navbar() {
     const timer = setInterval(() => {
       setImage1Visible((prevVisible) => !prevVisible);
     }, 5000);
+    if(!currentUser){
+      navigate('/login')
+    }
 
     return () => {
       clearInterval(timer);
     };
+ 
   }, []);
 
   const isActive = () => {
@@ -64,17 +81,21 @@ function Navbar() {
     };
   }, []);
 
-
   const handelLogout = () => {
-
-    localStorage.removeItem("user");
-    navigate("/")
-
-  }
+    if (localStorage.getItem("user")) localStorage.removeItem("user");
+    if (localStorage.getItem("seller")) localStorage.removeItem("seller");
+    navigate("/login");
+  };
 
   return (
     <>
-      <div className={active || pathname !== "/" ? "navbar active bg-indigo-600" : "navbar bg-indigo-600"}>
+      <div
+        className={
+          active || pathname !== "/"
+            ? "navbar active bg-indigo-600"
+            : "navbar bg-indigo-600"
+        }
+      >
         <div className="container">
           <div className="logo">
             <Link to="/" className="link">
@@ -95,33 +116,32 @@ function Navbar() {
                 </Link>
               </button>
             )}
-            {currentUser && !currentUser.user?.isSeller && (
+            {currentUser && !seller && !currentUser?.user?.isSeller ? (
               <button>
-                <Link className="link" to="/register">
+                <Link className="link" to="/user/beseller">
                   Become a seller
                 </Link>
               </button>
+            ) : (
+              <div></div>
             )}
             {currentUser && (
               <div className="user" onClick={() => setOpen(!open)}>
                 <img
-                  src={
-                    `http://localhost:8000/profiles/${currentUser.user.profilePicture}`
-                  }
+                  src={`http://localhost:8000/profiles/${currentUser.user.profilePicture}`}
                   alt="user"
                 />
                 <span>{currentUser.user.username}</span>
                 {open && (
                   <div className="options">
-                    {currentUser.user?.isSeller && (
+                    {seller || currentUser?.user?.isSeller ? (
                       <>
-                        <Link className="link" to="/mygigs">
+                        <Link className="link" to={`/seller/${sellerid}`}>
                           Gigs
                         </Link>
-                        <Link className="link" to="/gigs/add">
-                          Add New Gig
-                        </Link>
                       </>
+                    ) : (
+                      <div></div>
                     )}
                     <Link className="link" to="/orders">
                       Orders
@@ -129,7 +149,9 @@ function Navbar() {
                     <Link className="link" to="messages">
                       Messages
                     </Link>
-                    <Link className="link" onClick={handelLogout}>Logout</Link>
+                    <Link className="link" onClick={handelLogout}>
+                      Logout
+                    </Link>
                   </div>
                 )}
               </div>
@@ -170,7 +192,7 @@ function Navbar() {
                 {status === "successful" ? (
                   cats.slice(0, 4).map((cat, index) => (
                     <button key={index}>
-                      <Link className="link" to={`/gigs/cat/${index}`}>
+                      <Link className="link" to={`/cat/${cat.id}`}>
                         {cat.label}
                       </Link>
                     </button>

@@ -21,7 +21,7 @@ function SubMenu() {
           cats.map((item, index) => (
             <Link
               className="link menuLink"
-              to={`/gigs/cat/${index}`}
+              to={`/cat/${item.id}`}
               key={index}
             >
               {item.label}

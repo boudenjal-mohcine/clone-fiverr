@@ -29,6 +29,7 @@ type Mutation {
 type Query {
     gig(id: ID!): Gig
     gigs: [Gig]
+    gigsBySeller(sellerId: ID!) : [Gig]
 }
 `;
 

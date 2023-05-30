@@ -5,20 +5,26 @@ const Buyer = require("../../models/buyer");
 
 const queries = {
   orders: async () =>
-    await Order.find().populate("gig").populate('buyer').exec(),
-  order: async (parent,args) => await Order.findById(args.id).populate("gig").populate('buyer').exec(),
+    await Order.find().populate("gig").populate("buyer").exec(),
+  order: async (parent, args) =>
+    await Order.findById(args.id).populate("gig").populate("buyer").exec(),
+  orderGig: async (parent, args) =>
+    await Order.find({ gig: args.gigId })
+      .populate("gig")
+      .populate("buyer")
+      .exec(),
 };
 
 const mutations = {
   createOrder: async (parent, args) => {
     const { details, deleveredAt, gig, buyer } = args;
     if (!deleveredAt) {
-        throw new Error('Delivered date is required');
+      throw new Error("Delivered date is required");
     }
     const order = new Order({
       buyer,
       details,
-      deleveredAt:new Date(deleveredAt),
+      deleveredAt: new Date(deleveredAt),
       gig,
     });
     await order.save();
@@ -32,11 +38,11 @@ const mutations = {
 
     gigOrdred.orders.push(order._id);
     buyerOrdred.orders.push(order._id);
-   
+
     await gigOrdred.save();
     await buyerOrdred.save();
 
-    return queries.order(parent,order);
+    return queries.order(parent, order);
   },
 
   cancelOrder: async (parent, args) => {
@@ -47,7 +53,7 @@ const mutations = {
       throw new Error(`Order with ID ${id} not found`);
     }
     const gigOrdred = await Gig.findById(
-        new mongoose.Types.ObjectId(order.gig).toString()
+      new mongoose.Types.ObjectId(order.gig).toString()
     );
 
     const buyerOrdred = await Buyer.findById(
@@ -56,8 +62,12 @@ const mutations = {
 
     await order.deleteOne();
 
-    gigOrdred.orders = gigOrdred.orders.filter(order => new mongoose.Types.ObjectId(order.id).toString() !== id);
-    buyerOrdred.orders = buyerOrdred.orders.filter(order => new mongoose.Types.ObjectId(order.id).toString() !== id);
+    gigOrdred.orders = gigOrdred.orders.filter(
+      (order) => new mongoose.Types.ObjectId(order.id).toString() !== id
+    );
+    buyerOrdred.orders = buyerOrdred.orders.filter(
+      (order) => new mongoose.Types.ObjectId(order.id).toString() !== id
+    );
 
     await gigOrdred.save();
     await buyerOrdred.save();
@@ -75,7 +85,7 @@ const mutations = {
     if (!order) {
       throw new Error(`Order with ID ${id} not found`);
     }
-    return queries.order(parent,order);
+    return queries.order(parent, order);
   },
 
   completeOrder: async (parent, args) => {
@@ -88,7 +98,7 @@ const mutations = {
     if (!order) {
       throw new Error(`Order with ID ${id} not found`);
     }
-    return queries.order(parent,order);
+    return queries.order(parent, order);
   },
 
   rejectOrder: async (parent, args) => {
@@ -101,7 +111,7 @@ const mutations = {
     if (!order) {
       throw new Error(`Order with ID ${id} not found`);
     }
-    return queries.order(parent,order);
+    return queries.order(parent, order);
   },
 
   deliverOrder: async (parent, args) => {
@@ -114,7 +124,7 @@ const mutations = {
     if (!order) {
       throw new Error(`Order with ID ${id} not found`);
     }
-    return queries.order(parent,order);
+    return queries.order(parent, order);
   },
 };
 
