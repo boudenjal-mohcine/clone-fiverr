@@ -32,19 +32,12 @@ function Navbar() {
 
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
-
-  
-
   const seller = JSON.parse(localStorage.getItem("seller"));
-
   //get seller id
   const sellerid =
     currentUser && currentUser.user.isSeller
       ? currentUser.user.seller._id
       : seller?.id;
-
-
-
   const handleSubmit = () => {
     navigate(`gigs?search=${input}`);
   };
@@ -59,9 +52,7 @@ function Navbar() {
     const timer = setInterval(() => {
       setImage1Visible((prevVisible) => !prevVisible);
     }, 5000);
-    if(!currentUser){
-      navigate('/login')
-    }
+   
 
     return () => {
       clearInterval(timer);

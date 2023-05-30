@@ -29,9 +29,12 @@ function GigDetailsView() {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [additionalDetails, setAdditionalDetails] = useState("");
   const [makeOrder] = useMutation(MAKE_ORDER);
-
+  const currentUser =JSON.parse(localStorage.getItem("user"))
 
   const handleMakeOrder = () => {
+    if(!localStorage.getItem("user")){
+      navigate("/login");
+    }
     setShowOrderDetails(true);
   };
 
@@ -65,14 +68,13 @@ function GigDetailsView() {
     .filter((g) => g.category._id === gig.category._id && g._id !== gig._id)
     .map((g) => g._id);
 
-  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   const seller = JSON.parse(localStorage.getItem("seller"));
 
   //get seller id
   const sellerid =
-    currentUser && currentUser.user.isSeller
-      ? currentUser.user.seller._id
+  currentUser &&   currentUser.user.isSeller
+      ?   currentUser.user.seller._id
       : seller?.id;
 
       
@@ -442,11 +444,13 @@ function GigDetailsView() {
 
                     {showOrderDetails && (
                       <div className="absolute left-0 right-0 bottom-0 bg-white p-4">
+                        <form onSubmit={handleOrderSubmit}>
                         <label className="block mb-2">Delivery Date:</label>
                         <input
                           type="date"
                           className="border border-gray-300 px-4 py-2 rounded-md w-full mb-4"
                           value={deliveryDate}
+                          required
                           onChange={handleDeliveryDateChange}
                         />
 
@@ -458,15 +462,17 @@ function GigDetailsView() {
                           className="border border-gray-300 px-4 py-2 rounded-md w-full mb-4"
                           value={additionalDetails}
                           onChange={handleAdditionalDetailsChange}
+                          required
                         />
 
                         <button
-                          type="button"
+                          type="submit"
                           className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5"
-                          onClick={handleOrderSubmit}
                         >
                           Submit Order
                         </button>
+                        </form>
+                       
                       </div>
                     )}
                   </div>
