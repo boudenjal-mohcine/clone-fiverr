@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { GET_CONVERSATION, SEND_MESSAGE } from '../api/mutations';
 import { CheckCircleIcon, EyeIcon, PaperAirplaneIcon } from '@heroicons/react/solid';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 export default function MessagesView() {
     const [conversations, setConversations] = useState([]);
@@ -11,10 +12,11 @@ export default function MessagesView() {
     const currentUser = JSON.parse(localStorage.getItem('user'));
     const [addMessage] = useMutation(SEND_MESSAGE);
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     // Fetch all conversations
-    const { loading, error, data } = useQuery(GET_CONVERSATION, {
-        variables: { ids: currentUser?.user.conversations.map((conversation) => conversation._id) },
+    const { loading, error, data,refetch } = useQuery(GET_CONVERSATION, {
+        variables: { ids: currentUser?.user?.conversations.map((conversation) => conversation._id??conversation.id) },
     });
 
     useEffect(() => {
@@ -25,7 +27,9 @@ export default function MessagesView() {
         if (data && !loading && data.conversationsUser) {
             setConversations(data.conversationsUser);
         }
-    }, [data, loading]);
+        refetch();
+
+    }, [currentUser]);
 
     const handleUserClick = (conversation) => {
         setSelectedConversation(conversation);

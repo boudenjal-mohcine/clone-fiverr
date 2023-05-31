@@ -1,0 +1,1 @@
+export const UPDATE_USER_GIGS = 'UPDATE_USER_GIGS';

@@ -4,6 +4,7 @@ import GigCard from "../components/GigCard";
 
 
 function GigsList({gigs,title}) {
+  console.log(gigs);
   return (
     <>
     <h1 className="text-4xl font-bold text-gray-900 mb-4 text-center p-4">

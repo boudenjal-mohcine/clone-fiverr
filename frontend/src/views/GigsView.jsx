@@ -16,13 +16,6 @@ function GigsView() {
   const cats = categories.cats;
   const state_cats = categories.state;
 
-  // useEffect(() => {
-  //     getGigs().then((result) => {
-  //         setGigs(result);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }, []);
-
   useEffect(() => {
     if (status === "idle") {
       dispatch(getAllGigs());
