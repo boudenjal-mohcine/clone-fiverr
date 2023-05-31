@@ -53,10 +53,11 @@ function Navbar() {
   }, []);
 
   const handelLogout = () => {
+   
+    navigate('/login');
     if (localStorage.getItem("user")) localStorage.removeItem("user");
     if (localStorage.getItem("seller")) localStorage.removeItem("seller");
     if (localStorage.getItem("user_gigs")) localStorage.removeItem("user_gigs");
-    navigate("/login");
   };
 
   console.log(currentUser);

@@ -70,7 +70,7 @@ function GigDetailsView() {
   //same categories
 
   const same = gigs
-    .filter((g) => g.category._id === gig.category._id && g._id !== gig._id)
+    .filter((g) => g.category._id === (gig.category._id??gig.category.id) && (g._id !== gig._id??gig.id))
     .map((g) => g._id);
 
   const seller = JSON.parse(localStorage.getItem("seller"));

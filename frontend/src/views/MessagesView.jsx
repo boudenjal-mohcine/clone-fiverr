@@ -67,7 +67,7 @@ export default function MessagesView() {
                     <ul>
                         {conversations &&
                             conversations.map((conversation) => {
-                                const otherUser = conversation.users.find((user) => user.id !== currentUser.user._id);
+                                const otherUser = conversation.users.find((user) =>( user.id) !== currentUser.user._id);
                                 return (
                                     <li
                                         key={otherUser.id}
