@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCats } from "../redux/categorySlice";
 import { useParams } from "react-router-dom";
 import { getAllGigs } from "../redux/gigSlice";
-
+import { addGig } from "../redux/userGigsSlice";
 function InputGigView() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -57,7 +57,6 @@ function InputGigView() {
       setDescription(updateGigId.description);
       setCategory(updateGigId.category);
       setPrice(updateGigId.price);
-      console.log("plùùmkk" + seller);
     }
   }, [gigs, editMode, updateGigId]);
 
@@ -72,9 +71,18 @@ function InputGigView() {
       banner,
     });
     if (!editMode) {
-      await createGig({
+      const response = await createGig({
         variables: { title, description, price, category, seller, banner },
       });
+
+      const userGigs = JSON.parse(localStorage.getItem("user_gigs"));
+      console.log(response.data.createGig)
+      dispatch(addGig((response.data.createGig)));
+
+      // Update localStorage
+      localStorage.setItem("user_gigs", JSON.stringify(userGigs));
+      
+
     } else if (banner === null) {
       await editGig({
         variables: {
@@ -107,7 +115,6 @@ function InputGigView() {
     setBanner(null);
     //navigate to home
     navigate(`/seller/${seller}`);
-    window.location.reload();
   };
 
   const handleImageChange = (e) => {

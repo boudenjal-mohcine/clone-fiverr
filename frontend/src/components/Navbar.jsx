@@ -12,32 +12,12 @@ function Navbar() {
   const [input, setInput] = useState("");
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  //const [cats, setCats] = useState([]);
-
-  // const dispatch = useDispatch();
   const categories = useSelector((state) => state.categories);
   const { cats, status } = categories;
-
-  // useEffect(() => {
-  //   getCategories().then((result) => {
-  //       setCats(result);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, []);
-
-  // localStorage.setItem(
-  //   "currentUser",
-  //   JSON.stringify({ username: "mohcine", isSeller: true })
-  // );
-
-
   const currentUser = JSON.parse(localStorage.getItem("user"));
-  const seller = JSON.parse(localStorage.getItem("seller"));
-  //get seller id
-  const sellerid =
-    currentUser && currentUser.user.isSeller
-      ? currentUser.user.seller._id
-      : seller?.id;
+  const sellerid = currentUser?.user?.seller?._id
+
+
   const handleSubmit = () => {
     navigate(`gigs?search=${input}`);
   };
@@ -73,9 +53,11 @@ function Navbar() {
   }, []);
 
   const handelLogout = () => {
+   
+    navigate('/login');
     if (localStorage.getItem("user")) localStorage.removeItem("user");
     if (localStorage.getItem("seller")) localStorage.removeItem("seller");
-    navigate("/login");
+    if (localStorage.getItem("user_gigs")) localStorage.removeItem("user_gigs");
   };
 
   console.log(currentUser);
@@ -108,7 +90,7 @@ function Navbar() {
                 </Link>
               </button>
             )}
-            {currentUser && !seller && !currentUser?.user?.isSeller ? (
+            {currentUser && !currentUser?.user?.isSeller ? (
               <button>
                 <Link className="link" to="/user/beseller">
                   Become a seller
@@ -120,13 +102,13 @@ function Navbar() {
             {currentUser && (
               <div className="user" onClick={() => setOpen(!open)}>
                 <img
-                  src={`http://localhost:8000/profiles/${currentUser.user.profilePicture}`}
+                  src={`http://localhost:8000/profiles/${currentUser?.user?.profilePicture}`}
                   alt="user"
                 />
                 <span>{currentUser.user.username}</span>
                 {open && (
                   <div className="options">
-                    {seller || currentUser?.user?.isSeller ? (
+                    {currentUser && currentUser?.user?.isSeller ? (
                       <>
                         <Link className="link" to={`/seller/${sellerid}`}>
                           Gigs

@@ -1,56 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { useQuery,useMutation } from "@apollo/client";
 import { CREATE_CONVERSATION, GET_SELLER } from "../api/mutations";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import GigsList from "../components/GigsList";
 import { PlusIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
+import { getGigs } from '../redux/userGigsSlice';
+import { useDispatch, useSelector } from "react-redux";
 
 function SellerProfileView() {
   const { sellerId } = useParams();
   const { loading, error, data } = useQuery(GET_SELLER, {
     variables: { sellerId },
   });
-  const [createConversation] = useMutation(CREATE_CONVERSATION)
-  const [gigs, setGigs] = useState([]);
+  const gigs = useSelector((state) => state.user_gigs.gigs);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [createConversation] = useMutation(CREATE_CONVERSATION);
   const [seller, setSeller] = useState();
   const [user, setUser] = useState();
 
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
-
-  const currentSeller = JSON.parse(localStorage.getItem("seller"));
-
-  //get seller id
-  const sellerid =
-    ((currentUser)?((currentUser.user.isSeller)
-    ? currentUser.user.seller._id
-    : currentSeller?.id):(null))
+  const sellerid = currentUser?.user?.seller?._id;
 
   useEffect(() => {
     if (data && data.seller) {
       setSeller(data.seller);
-      setGigs(data.seller.gigs);
       setUser(data.seller.user);
+      console.log(data.seller.gigs)
+      if (gigs.length === 0) {
+        dispatch(getGigs(data.seller.gigs));
+      }
     }
-  }, [data]);
+  }, [data, dispatch, gigs]);
+
+  const handleCreateConversation = async () => {
+    if (data) {
+      const result = await createConversation({
+        variables: { users: [currentUser.user._id, seller.user.id] },
+      });
+
+      if (result.data && result.data.createConversation.id) {
+        const newConversationId = result.data.createConversation.id;
+
+        const newConversation = {
+          _id: newConversationId,
+          users: [currentUser.user._id, seller.user.id],
+          messages: [],
+        };
+
+        currentUser.user.conversations.push(newConversation);
+
+        localStorage.setItem("user", JSON.stringify(currentUser));
+
+        navigate('/messages');
+      }
+    }
+  };
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString();
   };
-
-  const handleCreateConversation = async() =>{
-
-    if(data)
-
-         alert(currentUser.user.username +"-"+seller.user.username);
-         await createConversation({variables:{users:[currentUser.user._id,seller.user.username]}})
-         
-  }
-
-
-  console.log(seller);
   return (
     <>
     {(!loading) ?  (<div className="flex flex-col md:flex-row px-8 mt-8">
@@ -108,7 +121,7 @@ function SellerProfileView() {
           <PlusIcon className="w-5 h-5" />
         </button>
         </Link>}
-          <GigsList gigs={gigs} title="Seller gigs" />
+        {gigs && <GigsList gigs={gigs} title="Seller gigs" />}
         </div>
       </div>):(<div>Loading ...</div>)}
     </>

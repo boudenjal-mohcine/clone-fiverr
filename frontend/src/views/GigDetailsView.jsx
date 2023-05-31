@@ -3,12 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { getAllGigs } from "../redux/gigSlice";
 import React, { useEffect, useState } from "react";
 import { getCats } from "../redux/categorySlice";
-import { PencilAltIcon, TrashIcon , CheckIcon, ShoppingBagIcon} from "@heroicons/react/outline";
+import {
+  PencilAltIcon,
+  TrashIcon,
+  CheckIcon,
+  ShoppingBagIcon,
+} from "@heroicons/react/outline";
 import { useMutation } from "@apollo/client";
 import { DELETE_GIG } from "../api/mutations";
 import GigCard from "../components/GigCard";
 import { MAKE_ORDER } from "../api/mutations";
-
+import { UserIcon } from "@heroicons/react/solid";
 
 function GigDetailsView() {
   const [activeTab, setActiveTab] = useState("details");
@@ -29,10 +34,10 @@ function GigDetailsView() {
   const [deliveryDate, setDeliveryDate] = useState("");
   const [additionalDetails, setAdditionalDetails] = useState("");
   const [makeOrder] = useMutation(MAKE_ORDER);
-  const currentUser =JSON.parse(localStorage.getItem("user"))
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   const handleMakeOrder = () => {
-    if(!localStorage.getItem("user")){
+    if (!localStorage.getItem("user")) {
       navigate("/login");
     }
     setShowOrderDetails(true);
@@ -58,29 +63,33 @@ function GigDetailsView() {
     }
   }, [dispatch, status, location, state_cats]);
 
-  const gig = gigs.find((g) => g._id === gigId);
+  const gig = gigs.find((g) => g._id??g.id === gigId);
   console.log(gigs);
   const url = "http://127.0.0.1:8000/banners/";
 
   //same categories
 
   const same = gigs
-    .filter((g) => g.category._id === gig.category._id && g._id !== gig._id)
+    .filter((g) => g.category._id === (gig.category._id??gig.category.id) && (g._id !== gig._id??gig.id))
     .map((g) => g._id);
-
 
   const seller = JSON.parse(localStorage.getItem("seller"));
 
   //get seller id
   const sellerid =
-  currentUser &&   currentUser.user.isSeller
-      ?   currentUser.user.seller._id
+    currentUser && currentUser.user.isSeller
+      ? currentUser.user.seller._id
       : seller?.id;
 
-      
   const handleOrderSubmit = async () => {
-    
-    await makeOrder({variables:{buyer:currentUser.user.buyer._id,gig:gig._id,deleveredAt:new Date(deliveryDate),details:additionalDetails}})
+    await makeOrder({
+      variables: {
+        buyer: currentUser.user.buyer._id,
+        gig: gig._id,
+        deleveredAt: new Date(deliveryDate),
+        details: additionalDetails,
+      },
+    });
     setDeliveryDate("");
     setAdditionalDetails("");
     setShowOrderDetails(false);
@@ -113,7 +122,7 @@ function GigDetailsView() {
                       <li class="inline-flex items-center">
                         <Link
                           to="/"
-                          class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+                          class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600"
                         >
                           <svg
                             aria-hidden="true"
@@ -144,7 +153,7 @@ function GigDetailsView() {
                           </svg>
                           <Link
                             to={`/cat/${gig.category._id}`}
-                            className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2 dark:text-gray-400 dark:hover:text-white"
+                            className="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ml-2"
                           >
                             {gig.category.label}
                           </Link>
@@ -165,7 +174,7 @@ function GigDetailsView() {
                               clip-rule="evenodd"
                             ></path>
                           </svg>
-                          <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">
+                          <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 ">
                             {gig.title}
                           </span>
                         </div>
@@ -314,6 +323,15 @@ function GigDetailsView() {
                             ))}
                           </ul>
                         </div>
+                        <Link
+                        to={`/seller/${gig?.seller?._id}`}
+                        >
+                        <button className="mt-4 flex items-center px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                          <UserIcon className="h-4 w-4 mr-2" />
+
+                          <span>Show Profile</span>
+                        </button>
+                        </Link>
                       </div>
                     </div>
                     <div
@@ -418,16 +436,14 @@ function GigDetailsView() {
                   </ul>
                   <div className="relative p-10 ">
                     {sellerid === gig.seller._id ? (
-                      <Link
-                        to={`/orders/${gig._id}`}
-                      >
-                      <button
-                        type="button"
-                        className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center"
-                      >
-                        <CheckIcon className="h-5 w-5 mr-2" /> Show Clients
-                        Orders
-                      </button>
+                      <Link to={`/orders/${gig._id}`}>
+                        <button
+                          type="button"
+                          className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center"
+                        >
+                          <CheckIcon className="h-5 w-5 mr-2" /> Show Clients
+                          Orders
+                        </button>
                       </Link>
                     ) : (
                       !showOrderDetails && (
@@ -445,34 +461,33 @@ function GigDetailsView() {
                     {showOrderDetails && (
                       <div className="absolute left-0 right-0 bottom-0 bg-white p-4">
                         <form onSubmit={handleOrderSubmit}>
-                        <label className="block mb-2">Delivery Date:</label>
-                        <input
-                          type="date"
-                          className="border border-gray-300 px-4 py-2 rounded-md w-full mb-4"
-                          value={deliveryDate}
-                          required
-                          onChange={handleDeliveryDateChange}
-                        />
+                          <label className="block mb-2">Delivery Date:</label>
+                          <input
+                            type="date"
+                            className="border border-gray-300 px-4 py-2 rounded-md w-full mb-4"
+                            value={deliveryDate}
+                            required
+                            onChange={handleDeliveryDateChange}
+                          />
 
-                        <label className="block mb-2">
-                          Additional Details:
-                        </label>
-                        <input
-                          type="text"
-                          className="border border-gray-300 px-4 py-2 rounded-md w-full mb-4"
-                          value={additionalDetails}
-                          onChange={handleAdditionalDetailsChange}
-                          required
-                        />
+                          <label className="block mb-2">
+                            Additional Details:
+                          </label>
+                          <input
+                            type="text"
+                            className="border border-gray-300 px-4 py-2 rounded-md w-full mb-4"
+                            value={additionalDetails}
+                            onChange={handleAdditionalDetailsChange}
+                            required
+                          />
 
-                        <button
-                          type="submit"
-                          className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5"
-                        >
-                          Submit Order
-                        </button>
+                          <button
+                            type="submit"
+                            className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-sm px-5 py-2.5"
+                          >
+                            Submit Order
+                          </button>
                         </form>
-                       
                       </div>
                     )}
                   </div>

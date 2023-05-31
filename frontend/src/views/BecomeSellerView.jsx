@@ -1,27 +1,25 @@
 import React, { useState } from "react";
 import "../styles/Login.css";
-import { useMutation } from '@apollo/client';
-import { BECOME_SELLER } from '../api/mutations';
+import { useMutation } from "@apollo/client";
+import { BECOME_SELLER } from "../api/mutations";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setSeller } from "../redux/userSlice";
 
 export default function BecomeSellerView() {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const currentUser = JSON.parse(localStorage.getItem("user"))
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
-  if(!currentUser){
-    navigate("/login")
+  if (!currentUser) {
+    navigate("/login");
   }
 
-  if(currentUser.user?.isSeller){
-     alert("Already a seller")
+  if (currentUser.user?.isSeller) {
+    alert("Already a seller");
   }
 
-  const user = currentUser.user._id
+  const user = currentUser.user._id;
 
   console.log(user);
   const [firstName, setFirstName] = useState("");
@@ -32,21 +30,41 @@ export default function BecomeSellerView() {
   const handleBecomeSeller = async (e) => {
     e.preventDefault();
     console.log("Form submitted:", { firstName, lastName, skills });
-    const response = await becomeSeller({ variables: { firstName,lastName,skills,user} })
+    const response = await becomeSeller({
+      variables: { firstName, lastName, skills, user },
+    });
     // dispatch(setSeller(response.data));
-    console.log(response.data);
-    localStorage.setItem('seller',JSON.stringify(response.data.createSeller))
+    console.log(response.data.createSeller);
+    // localStorage.setItem('seller',JSON.stringify(response.data.createSeller))
+
+    // Create a new seller object
+    const seller = {
+      _id: response.data.createSeller.id,
+      first_name: response.data.createSeller.first_name,
+      last_name: response.data.createSeller.last_name,
+      skills: response.data.createSeller.skills,
+      createdAt: response.data.createSeller.createdAt,
+      gigs: [],
+    };
+
+    // Update the conversations array in currentUser
+    currentUser.user["seller"] = seller;
+    currentUser.user.isSeller = true;
+
+    // Update localStorage
+    localStorage.setItem("user", JSON.stringify(currentUser));
+
     setFirstName("");
     setLastName("");
     setSkills([]);
 
-    navigate('/')
+    navigate("/");
   };
 
-
-
   const handleSkillsChange = (e) => {
-    const enteredSkills = e.target.value.split(",").map((skill) => skill.trim());
+    const enteredSkills = e.target.value
+      .split(",")
+      .map((skill) => skill.trim());
     setSkills(enteredSkills);
   };
 

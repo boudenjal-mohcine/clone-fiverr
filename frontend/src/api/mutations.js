@@ -18,6 +18,11 @@ export const ADD_GIG = gql`
       banner: $banner
     ) {
       id
+      title
+      description
+      createdAt
+      banner
+      price
     }
   }
 `;
@@ -38,12 +43,11 @@ export const BECOME_SELLER = gql`
       id
       first_name
       last_name
+      gigs{
+        id
+      }
       skills
       createdAt
-      user{
-        id
-        username
-      }
     }
   }
 `;
@@ -212,9 +216,11 @@ export const CREATE_CONVERSATION = gql`
 mutation Mutation($users: [String!]!) {
   createConversation(users: $users) {
     id
-    users {
+    users{
       id
-      username
+    }
+    messages{
+      id
     }
   }
 }
@@ -251,3 +257,14 @@ mutation CreateMessage($user: String!, $conversation: String!, $content: String!
   }
 }
 `;
+
+export const GET_ORDER = gql`
+query Query($orderId: ID!) {
+  order(id: $orderId) {
+    gig {
+      id
+    }
+  }
+}
+`;
+
